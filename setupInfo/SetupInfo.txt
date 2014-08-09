@@ -1,14 +1,14 @@
 Download JRE 7 - http://www.oracle.com/technetwork/java/javase/downloads/java-se-jre-7-download-432155.html
 
-JAVA_HOME -> path where the Java Runtime Environment is istalled
+JAVA_HOME -> directory where the Java Runtime Environment is installed
 	     ex: C:\Program Files\Java\jre7
 
 %windir%System32 -> ex: C:\Windows\System32
 
-
+Copy the following files to the specified directories
 
 comm.jar - %JAVA_HOME%/lib
-	   %JAVA_HOME%/jre/lib/ext,
+	   %JAVA_HOME%/jre/lib/ext
 
 win32com.dll -  %JAVA_HOME%/bin
  		%JAVA_HOME%/jre/bin
