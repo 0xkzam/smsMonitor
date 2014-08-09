@@ -18,6 +18,6 @@ public class TestDB {
     }
 
     static void testSelect() throws SQLException {
-        Query.delete();
+        //Query.delete();
     }
 }

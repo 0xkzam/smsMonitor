@@ -45,9 +45,8 @@ public class MessageDialogBox {
     }
 
     public static void aboutPage() {
-        JOptionPane.showMessageDialog(null, "SMS Monitor 1.0v"
-                + "\nCopyright (C) August, 2014"
-                + "\nAuthor: Kasun Amarasena  (email : kasunAmarasena@gmail.com) \n"
+        JOptionPane.showMessageDialog(null, "SMS Monitor 1.0v"                
+                + "\nAuthor: Kasun Amarasena  (email : kasunAmarasena@gmail.com) "
                 + "\nBuilt uising JDK (Java SE Development Kit) 1.7.0_45 and javax.comm API 1.0"
                 + "\n \n", "About SMS Monitor 1.0v", JOptionPane.INFORMATION_MESSAGE);
     }
