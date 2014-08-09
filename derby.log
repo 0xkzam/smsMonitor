@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Sat Aug 09 22:08:48 IST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0147-bba3-01f0-0000009fd710 
+on database directory E:\Projects & Research\TextMessageProject\smsDB  with class loader sun.misc.Launcher$AppClassLoader@93dee9 
+Loaded from file:/C:/Program%20Files/Java/jdk1.7.0_45/db/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_45-b18
+user.dir=E:\Projects & Research\TextMessageProject
+os.name=Windows 7
+os.arch=x86
+os.version=6.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
