@@ -54,7 +54,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private boolean error = false;
 
     /**
-     * Singleton - return instance of the of ComPortReader class
+     * Returns an instance of the of ComPortReader class
      *
      * @param comPort Name of the Com port-ex: "COM4"
      * @return ComPortReader object
