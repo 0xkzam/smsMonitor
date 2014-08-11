@@ -26,11 +26,19 @@ import java.sql.Time;
 import java.util.List;
 
 /**
- * This class provides static methods for database interactions 
+ * This class provides static methods for database interactions
  *
  * @author Kasun Amarasena
  */
 public class Query {
+
+    private final static String INSERT = "insert into info values (?, ?, ?, ?, current_timestamp)";
+    private final static String EMPTY_LISTENER = "delete from listener";
+    private final static String GET_LISTENER = "select * from listener";
+    private final static String GET_INFO = "select * from info order by dateVar desc,timeVar desc";
+    private final static String MIN_DATE = "select min(dateVar) from info";
+    private final static String MAX_DATE = "select max(dateVar) from info";
+    private final static String ROW_COUNT ="select count(phone_no) from info";
 
     private static Connection con = DatabaseConnection.getInstance();
 
@@ -44,7 +52,7 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void insert(String num, Date date, Time time, String msg) throws SQLException {
-        PreparedStatement st = con.prepareStatement("insert into info values (?, ?, ?, ?, current_timestamp) ");
+        PreparedStatement st = con.prepareStatement(INSERT);
         st.setString(1, num);
         st.setDate(2, date);
         st.setTime(3, time);
@@ -74,7 +82,7 @@ public class Query {
      * @throws SQLException
      */
     public static void emptyListenerTable() throws SQLException {
-        PreparedStatement st = con.prepareStatement("delete from listener");
+        PreparedStatement st = con.prepareStatement(EMPTY_LISTENER);
         st.execute();
     }
 
@@ -85,7 +93,7 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static ResultSet selectFromListener() throws SQLException {
-        PreparedStatement st = con.prepareStatement("select * from listener");
+        PreparedStatement st = con.prepareStatement(GET_LISTENER);
         st.executeQuery();
         return st.getResultSet();
     }
@@ -97,7 +105,7 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static ResultSet select() throws SQLException {
-        PreparedStatement st = con.prepareStatement("select * from info  order by dateVar desc,timeVar desc ");
+        PreparedStatement st = con.prepareStatement(GET_INFO);
 
         st.executeQuery();
         return st.getResultSet();
@@ -124,7 +132,7 @@ public class Query {
      * @throws SQLException
      */
     public static Date getMinDate() throws SQLException {
-        PreparedStatement st = con.prepareStatement("select min(dateVar) from info ");
+        PreparedStatement st = con.prepareStatement(MIN_DATE);
         st.executeQuery();
         ResultSet r = st.getResultSet();
         Date date = null;
@@ -140,7 +148,7 @@ public class Query {
      * @throws SQLException
      */
     public static Date getCurrentDate() throws SQLException {
-        PreparedStatement st = con.prepareStatement("select max(dateVar) from info ");
+        PreparedStatement st = con.prepareStatement(MAX_DATE);
         st.executeQuery();
         ResultSet r = st.getResultSet();
         Date date = null;
@@ -171,19 +179,20 @@ public class Query {
     public static int rowCount() {
         PreparedStatement st;
         try {
-            st = con.prepareStatement("select count(phone_no) from info");
+            st = con.prepareStatement(ROW_COUNT);
             ResultSet r = st.executeQuery();
             if (r.next()) {
                 return r.getInt(1);
             }
         } catch (SQLException ex) {
-            Logger.printError("com.model.Query","rowCount" , ex.toString()); //logger
+            Logger.printError("com.model.Query", "rowCount", ex.toString()); //logger
         }
         return 0;
     }
 
     /**
-     * ***************Following methods were only used in the development process    
+     * ***************Following methods were only used in the development
+     * process
      */
     /**
      * Drop a table from the database
@@ -222,8 +231,8 @@ public class Query {
         PreparedStatement st = con.prepareStatement("alter table info add column stamp timestamp default current_timestamp");
         st.execute();
     }
-    
-    static void delete() throws SQLException{
+
+    static void delete() throws SQLException {
         PreparedStatement st = con.prepareStatement("delete from info");
         st.execute();
     }
