@@ -48,7 +48,8 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private OutputStream outputStream;
     private boolean hasNext = true; // For Thread synchronization
     private String msgBuffer; // Message buffer
-    //private ComPortReader comportReader;
+    private static ComPortReader comportReader;
+    private final static Object ob = new Object(); //For synchronization
     public static int count = 1; // testing .........
     private static String comport = "";
     private boolean error = false;
@@ -65,9 +66,11 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
      */
     public static ComPortReader getInstance(String comPort) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
         comport = comPort;
-        //if (comportReader == null) {
-        ComPortReader comportReader = new ComPortReader(comPort);
-        //}
+        if (comportReader == null) {
+            synchronized (ob) {
+                comportReader = new ComPortReader(comPort);
+            }
+        }
         return comportReader;
     }
 
@@ -161,7 +164,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
                     hasNext = false;
                 }
                 if (msgBuffer.indexOf("ERROR") != -1) {
-                    Logger.printError(this.getClass().getName(),"serialEvet","AT ERROR"); //logger
+                    Logger.printError(this.getClass().getName(), "serialEvet", "AT ERROR"); //logger
                 }
                 break;
         }
