@@ -48,8 +48,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private OutputStream outputStream;
     private boolean hasNext = true; // For Thread synchronization
     private String msgBuffer; // Message buffer
-    private static ComPortReader comportReader;
-    private final static Object ob = new Object(); //For synchronization
+    private static ComPortReader comportReader;    
     public static int count = 1; // testing .........
     private static String comport = "";
     private boolean error = false;
@@ -67,7 +66,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     public static ComPortReader getInstance(String comPort) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
         comport = comPort;
         if (comportReader == null) {
-            synchronized (ob) {
+            synchronized (ComPortReader.class) {
                 if (comportReader == null) {
                     comportReader = new ComPortReader(comPort);
                 }
