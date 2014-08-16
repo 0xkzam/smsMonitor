@@ -38,7 +38,7 @@ public class Query {
     private final static String GET_INFO = "select * from info order by dateVar desc,timeVar desc";
     private final static String MIN_DATE = "select min(dateVar) from info";
     private final static String MAX_DATE = "select max(dateVar) from info";
-    private final static String ROW_COUNT ="select count(phone_no) from info";
+    private final static String ROW_COUNT = "select count(phone_no) from info";
 
     private static Connection con = DatabaseConnection.getInstance();
 

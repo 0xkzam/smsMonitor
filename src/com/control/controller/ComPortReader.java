@@ -68,7 +68,9 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
         comport = comPort;
         if (comportReader == null) {
             synchronized (ob) {
-                comportReader = new ComPortReader(comPort);
+                if (comportReader == null) {
+                    comportReader = new ComPortReader(comPort);
+                }
             }
         }
         return comportReader;
