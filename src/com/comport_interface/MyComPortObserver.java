@@ -14,26 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.control.new_controller;
+package com.comport_interface;
 
 import java.util.Observable;
-import java.util.Observer;
 
 /**
  *
  * @author Kasun Amarasena
  */
-public class MessageObserver implements Observer {
-
-    private static String tempMessage="";
+class MyComPortObserver extends ComPortObserver {
 
     @Override
-    public void update(Observable o, Object arg) {
-        String message = (String) arg;
-        if (!tempMessage.equals(message)) {            
-            System.out.println("messge: " + message);
-            tempMessage = message;
-        }
+    public void update(Observable o, ComPort comport) {
+        String string = new String(comport.getReadBuffer());
+        System.out.println("Observer: " + string);
     }
 
 }
