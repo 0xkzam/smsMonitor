@@ -67,9 +67,12 @@ public class ComPortTest {
     @Test
     public void testSend_String(){
         System.out.println("send");
-        String command = "AT\r\n";       
+        String command = "AT\r\n";   
+        
         try {
             comport.send(command);
+            comport.send("AT+CMGF=1\r\n");
+            comport.send("AT+CMGL=\"ALL\"\r\n");
         } catch (IOException ex) {
             assertFalse("", true);
         }

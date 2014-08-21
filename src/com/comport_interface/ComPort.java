@@ -50,7 +50,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
     private InputStream inputStream;
     private OutputStream outputStream;
     private byte[] readBuffer; // Input Stream Buffer    
-    public static final int DEFAULT_BUFFER_SIZE = 1000;
+    public static final int DEFAULT_BUFFER_SIZE = 1024;
     private int bufferSize;
 
     public ComPort(CommPortIdentifier portID) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
@@ -101,13 +101,13 @@ public class ComPort extends Observable implements SerialPortEventListener {
 
     @Override
     public void serialEvent(SerialPortEvent event) {
-        int type = event.getEventType();
+        int type = event.getEventType();        
         switch (type) {
             case SerialPortEvent.BI:
             case SerialPortEvent.OE:
             case SerialPortEvent.FE:
             case SerialPortEvent.PE:
-            case SerialPortEvent.CD:
+            case SerialPortEvent.CD:                
             case SerialPortEvent.CTS:
             case SerialPortEvent.DSR:
             case SerialPortEvent.RI:

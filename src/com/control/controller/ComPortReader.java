@@ -46,7 +46,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private SerialPort port;
     private InputStream inputStream;
     private OutputStream outputStream;
-    private boolean hasNext = true; // For Thread synchronization
+    private volatile boolean hasNext = true; // For Thread synchronization
     private String msgBuffer; // Message buffer
     private static ComPortReader comportReader;    
     public static int count = 1; // testing .........
@@ -54,6 +54,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private boolean error = false;
 
     /**
+     * Warning: Singleton ANTI-PATTERN
      * Returns an instance of the of ComPortReader class
      *
      * @param comPort Name of the Com port-ex: "COM4"
