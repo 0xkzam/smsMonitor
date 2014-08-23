@@ -17,17 +17,34 @@
 package com.comport_interface;
 
 import java.util.Observable;
+import org.junit.Test;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class MyComPortObserver extends ComPortObserver {
+public class ComPortObserverTest {
 
-    @Override
-    public void update(Observable o, byte[] inputBuffer) {
-        String string = new String(inputBuffer);
-        System.out.println("Observer: " + string);
+    public ComPortObserverTest() {
+    }
+
+    /**
+     * Test of update method, of class ComPortObserver.
+     */
+    @Test
+    public void testUpdate_Observable_Object() {
+        System.out.println("Testing update");
+
+        String s = " fahda gda gd agd";
+        byte[] b = s.getBytes();
+        
+        Object o = b;
+        boolean check = o instanceof byte[];
+        System.out.println("intanceof:"+check);
+        byte[] b2 = (byte[])o;
+        
+        System.out.println("Testing MyComportObserver.update()");
+        new MyComPortObserver().update(new Observable(), b2);
     }
 
 }

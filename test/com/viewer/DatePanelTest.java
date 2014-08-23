@@ -14,20 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.comport_interface;
+package com.viewer;
 
-import java.util.Observable;
+import com.model.Query;
+import java.sql.SQLException;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class MyComPortObserver extends ComPortObserver {
+public class DatePanelTest {
 
-    @Override
-    public void update(Observable o, byte[] inputBuffer) {
-        String string = new String(inputBuffer);
-        System.out.println("Observer: " + string);
+    public DatePanelTest() {
+    }
+
+    /**
+     * Test of setMinDate method, of class DatePanel.
+     */
+    @Test
+    public void testSetMinDate() {
+        System.out.println("Testing setMinDate()");
+        try {
+            Query.getCurrentDate();
+        } catch (SQLException ex) {
+            assertFalse(ex.toString(),true);
+        }
+
     }
 
 }

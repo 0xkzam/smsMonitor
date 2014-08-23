@@ -14,10 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.control.controller;
 
-import javax.comm.SerialPortEvent;
+import java.io.IOException;
+import java.util.List;
+import java.util.TooManyListenersException;
+import javax.comm.NoSuchPortException;
+import javax.comm.PortInUseException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,22 +33,22 @@ import static org.junit.Assert.*;
  * @author Kasun Amarasena
  */
 public class ComPortReaderTest {
-    
+
     public ComPortReaderTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -54,106 +57,66 @@ public class ComPortReaderTest {
      * Test of getInstance method, of class ComPortReader.
      */
     @Test
-    public void testGetInstance() throws Exception {
-        System.out.println("getInstance");
+    public void testGetInstance() {
+        System.out.println("Running getInstance()");
+
+        ComPortReader result;
+
         String comPort = "";
-        ComPortReader expResult = null;
-        ComPortReader result = ComPortReader.getInstance(comPort);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            result = ComPortReader.getInstance(comPort);
+            assertFalse("No such Port", true);
+        } catch (NoSuchPortException e) {
+            System.out.println("No such Port-Connected \"" + comPort + "\"");
+        } catch (PortInUseException | IOException | TooManyListenersException ex) {
+            assertFalse(ex.toString(), true);
+        }
+
+        List<String> ls = Utility.getAvailableComports();
+        comPort = ls.iterator().next();
+        System.out.println("Connecting to " + comPort);
+
+        try {
+            result = ComPortReader.getInstance(comPort);
+            System.out.println("Connected to " + comPort);
+        } catch (NoSuchPortException | PortInUseException | IOException | TooManyListenersException ex) {
+            assertFalse(ex.toString(), true);
+        }
+
+        System.out.println("Reconnecting to " + comPort);
+        try {
+            result = ComPortReader.getInstance(comPort);
+            assertFalse("Port in use-Reconnected", true);
+        } catch (PortInUseException e) {
+            System.out.println("Port in use:" + comPort);
+        } catch (NoSuchPortException | IOException | TooManyListenersException ex) {
+            assertFalse(ex.toString(), true);
+        }
+
     }
 
-    /**
-     * Test of getMsgBuffer method, of class ComPortReader.
-     */
-    @Test
-    public void testGetMsgBuffer() {
-        System.out.println("getMsgBuffer");
-        ComPortReader instance = null;
-        String expResult = "";
-        String result = instance.getMsgBuffer();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public static void test1() {
+        try {
+            final ComPortReader com = ComPortReader.getInstance("COM10");
+            Thread t = new Thread(com);
 
-    /**
-     * Test of send method, of class ComPortReader.
-     */
-    @Test
-    public void testSend() throws Exception {
-        System.out.println("send");
-        String command = "";
-        ComPortReader instance = null;
-        instance.send(command);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+            Thread t2 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        System.out.println("" + ex);
+                    }
+                    System.out.println(com.getMsgBuffer());
+                }
+            });
+            t.start();
+            t2.start();
 
-    /**
-     * Test of run method, of class ComPortReader.
-     */
-    @Test
-    public void testRun() {
-        System.out.println("run");
-        ComPortReader instance = null;
-        instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        } catch (NoSuchPortException | PortInUseException | IOException | TooManyListenersException ex) {
+            System.out.println(ex);
+        }
 
-    /**
-     * Test of serialEvent method, of class ComPortReader.
-     */
-    @Test
-    public void testSerialEvent() {
-        System.out.println("serialEvent");
-        SerialPortEvent event = null;
-        ComPortReader instance = null;
-        instance.serialEvent(event);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-
-    /**
-     * Test of register method, of class ComPortReader.
-     */
-    @Test
-    public void testRegister() throws Exception {
-        System.out.println("register");
-        String portName = "";
-        ComPortReader instance = null;
-        instance.register(portName);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of isHasNext method, of class ComPortReader.
-     */
-    @Test
-    public void testIsHasNext() {
-        System.out.println("isHasNext");
-        ComPortReader instance = null;
-        boolean expResult = false;
-        boolean result = instance.isHasNext();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getComport method, of class ComPortReader.
-     */
-    @Test
-    public void testGetComport() {
-        System.out.println("getComport");
-        String expResult = "";
-        String result = ComPortReader.getComport();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
 }

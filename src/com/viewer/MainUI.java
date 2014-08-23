@@ -17,6 +17,7 @@
 package com.viewer;
 
 import com.control.controller.ProcessRunner;
+import com.control.controller.Utility;
 import com.control.helper.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -399,7 +400,7 @@ public class MainUI extends javax.swing.JFrame {
             MessageDialogBox.showMessage("You have already connected to " + getComport() + ". To connect to a different \nport, disconnect the current connection and try again.", "");
             return;
         }
-        Object input = JOptionPane.showInputDialog(this, "Select COM port", "Connect", JOptionPane.PLAIN_MESSAGE, null, getAvailableComports().toArray(), "");
+        Object input = JOptionPane.showInputDialog(this, "Select COM port", "Connect", JOptionPane.PLAIN_MESSAGE, null, Utility.getAvailableComports().toArray(), "");
         if (input != null) {
             setComport((String) input);
             processRunner = new ProcessRunner(getComport());
@@ -587,24 +588,6 @@ public class MainUI extends javax.swing.JFrame {
      */
     public boolean isConnected() {
         return isConnected;
-    }
-
-    /**
-     * @return List<String> of available COM port identifiers as Strings
-     */
-    public List<String> getAvailableComports() {
-
-        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
-        CommPortIdentifier portId;
-        List<String> ls = new ArrayList<>(4);
-
-        while (portList.hasMoreElements()) {
-            portId = (CommPortIdentifier) portList.nextElement();
-            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                ls.add(portId.getName());
-            }
-        }
-        return ls;
     }
 
     private void removeAllRows() {

@@ -14,20 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.comport_interface;
-
-import java.util.Observable;
+package com.control.controller;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class MyComPortObserver extends ComPortObserver {
+public class SampleRunner {
 
-    @Override
-    public void update(Observable o, byte[] inputBuffer) {
-        String string = new String(inputBuffer);
-        System.out.println("Observer: " + string);
+    public static void main(String[] args) {
+
+        ProcessRunner p = new ProcessRunner("COM10");
+        p.start();
+        
     }
 
+    
 }

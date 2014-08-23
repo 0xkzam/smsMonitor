@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
  */
 public class MessageDialogBox {
 
-    static Component parentComponent = null;
+    private static Component parentComponent = null;
 
     public static void showErrorMessage(String msg, String title) {
         JOptionPane.showMessageDialog(parentComponent, msg, title, JOptionPane.ERROR_MESSAGE);

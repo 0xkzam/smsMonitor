@@ -17,6 +17,8 @@
 package com.viewer;
 
 import com.control.helper.Logger;
+import java.io.File;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
@@ -62,7 +64,7 @@ public class Helper {
         return s;
     }
 
-    /**     
+    /**
      * @return Date object of the passed String
      */
     static Date stringToDate(String s) {
@@ -74,7 +76,7 @@ public class Helper {
     }
 
     /**
-     * 
+     *
      * @param string
      * @return Time object of the passed String
      */
@@ -84,9 +86,25 @@ public class Helper {
             java.util.Date parse = time.parse(string);
             return new Time(parse.getHours(), parse.getMinutes(), parse.getSeconds());
         } catch (ParseException ex) {
-            Logger.printError("com.viewe.Helper","stringToTime",ex.toString()); //logger
+            Logger.printError("com.viewe.Helper", "stringToTime", ex.toString()); //logger
         }
         return null;
+    }
+
+    /**
+     * Search for folder or file in the current directory
+     * @param name Folder of file name
+     * @return true is folder/file name exists, false otherwise
+     */
+    public static boolean isFound(String name) {
+        String absPath = Paths.get("").toAbsolutePath().toString();
+        File dir = new File(absPath);
+        for (String s : dir.list()) {
+            if (s.equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

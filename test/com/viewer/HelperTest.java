@@ -14,20 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.comport_interface;
 
-import java.util.Observable;
+package com.viewer;
+
+import com.model.DatabaseConnection;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class MyComPortObserver extends ComPortObserver {
-
-    @Override
-    public void update(Observable o, byte[] inputBuffer) {
-        String string = new String(inputBuffer);
-        System.out.println("Observer: " + string);
+public class HelperTest {
+    
+    public HelperTest() {
     }
 
+
+
+    /**
+     * Test of isFound method, of class Helper.
+     */
+    @Test
+    public void testIsFound() {
+        System.out.println("Testing searchFolder()");        
+        
+        boolean b = Helper.isFound("src");
+        assertTrue("Found:",b);
+        
+        b = Helper.isFound("SRC");
+        assertFalse("Found:",b);
+    }
+    
 }

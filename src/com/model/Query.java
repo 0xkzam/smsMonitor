@@ -40,7 +40,7 @@ public class Query {
     private final static String MAX_DATE = "select max(dateVar) from info";
     private final static String ROW_COUNT = "select count(phone_no) from info";
 
-    private static Connection con = DatabaseConnection.getInstance();
+    private static final Connection con = DatabaseConnection.getInstance();
 
     /**
      * Execute INSERT statement with a prepared statement
@@ -199,8 +199,8 @@ public class Query {
      *
      * @throws SQLException
      */
-    static void drop() throws SQLException {
-        PreparedStatement st = con.prepareStatement("drop table info");
+    static void drop(Connection connection) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("drop table info");
         st.execute();
     }
 
@@ -209,31 +209,31 @@ public class Query {
      *
      * @throws SQLException
      */
-    static void createTable() throws SQLException {
-        PreparedStatement st = con.prepareStatement("create table info (phone_no varchar(40),"
+    static void createTable(Connection connection) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("create table info (phone_no varchar(40),"
                 + "dateVar DATE,timeVar TIME, message varchar(220))");
         st.execute();
     }
 
-    static void createTable2() throws SQLException {
-        PreparedStatement st = con.prepareStatement("create table listener(id BOOLEAN)");
+    static void createTable2(Connection connection) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("create table listener(id BOOLEAN)");
         st.execute();
     }
 
-    static void createTrigger() throws SQLException {
-        PreparedStatement st = con.prepareStatement("create trigger trig after insert on info "
+    static void createTrigger(Connection connection) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("create trigger trig after insert on info "
                 + "for each row "
                 + "insert into listener values (true)");
         st.execute();
     }
 
-    static void addColumn() throws SQLException {
-        PreparedStatement st = con.prepareStatement("alter table info add column stamp timestamp default current_timestamp");
+    static void addColumn(Connection connection) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("alter table info add column stamp timestamp default current_timestamp");
         st.execute();
     }
 
-    static void delete() throws SQLException {
-        PreparedStatement st = con.prepareStatement("delete from info");
+    static void delete(Connection connection,String tableName) throws SQLException {
+        PreparedStatement st = connection.prepareStatement("delete from "+tableName);
         st.execute();
     }
 

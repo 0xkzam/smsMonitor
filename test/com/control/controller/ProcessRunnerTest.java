@@ -14,20 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.comport_interface;
 
-import java.util.Observable;
+package com.control.controller;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class MyComPortObserver extends ComPortObserver {
-
-    @Override
-    public void update(Observable o, byte[] inputBuffer) {
-        String string = new String(inputBuffer);
-        System.out.println("Observer: " + string);
+public class ProcessRunnerTest {
+    
+    public ProcessRunnerTest() {
     }
 
+    /**
+     * Test of start method, of class ProcessRunner.
+     */
+    @Test
+    public void testStart() {
+        
+    }
+
+    
+    
 }

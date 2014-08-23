@@ -33,13 +33,13 @@ public abstract class ComPortObserver implements Observer {
      * This method is called whenever the observed object is changed.
      *
      * @param o the observable object
-     * @param comport an argument passed to the <code>notifyObservers</code>
-     * method
+     * @param inputBuffer an argument passed to the <code>notifyObservers</code>
+     * method which is an input buffer of bytes from the comport
      */
     @Override
-    public void update(Observable o, Object comport) {
-        if (comport instanceof ComPort) {
-            update(o, (ComPort) comport);
+    public void update(Observable o, Object inputBuffer) {
+        if (inputBuffer instanceof byte[]) {
+            update(o, (byte[]) inputBuffer);
         }
     }
 
@@ -47,7 +47,7 @@ public abstract class ComPortObserver implements Observer {
      * This method is called whenever the observed object is changed.
      *
      * @param o the observable object
-     * @param comport ComPort Object
+     * @param inputBuffer ComPort Object
      */
-    public abstract void update(Observable o, ComPort comport);
+    public abstract void update(Observable o, byte[] inputBuffer);
 }

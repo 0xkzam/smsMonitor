@@ -33,6 +33,8 @@ import javax.comm.PortInUseException;
 import com.viewer.MessageDialogBox;
 
 /**
+ * DEPRECATED - use com.comport_interface instead
+ * 
  * This class is a SerialPortEventListener and a Runnable and used to Access a
  * COM port with Serial interface and register it, send AT commands through an
  * OutputStream. A SerialPortEventListener is used listen to the input of the
@@ -48,13 +50,13 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     private OutputStream outputStream;
     private volatile boolean hasNext = true; // For Thread synchronization
     private String msgBuffer; // Message buffer
-    private static ComPortReader comportReader;    
+    //private static volatile ComPortReader comportReader;
     public static int count = 1; // testing .........
     private static String comport = "";
     private boolean error = false;
 
     /**
-     * Warning: Singleton ANTI-PATTERN
+     * 
      * Returns an instance of the of ComPortReader class
      *
      * @param comPort Name of the Com port-ex: "COM4"
@@ -66,14 +68,9 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
      */
     public static ComPortReader getInstance(String comPort) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
         comport = comPort;
-        if (comportReader == null) {
-            synchronized (ComPortReader.class) {
-                if (comportReader == null) {
-                    comportReader = new ComPortReader(comPort);
-                }
-            }
+        synchronized (ComPortReader.class) {
+            return new ComPortReader(comPort);
         }
-        return comportReader;
     }
 
     private ComPortReader(String comPort) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
@@ -130,8 +127,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
             }
         } catch (InterruptedException e) {
             port.close();
-            Logger.printError(this.getClass().getName(), "run ", e.toString()); //logger   
-            return;
+            Logger.printError(this.getClass().getName(), "run ", e.toString()); //logger               
         }
     }
 
@@ -149,7 +145,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
             case SerialPortEvent.RI:
             case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
             case SerialPortEvent.DATA_AVAILABLE:
-                byte[] readBuffer = new byte[1000];
+                byte[] readBuffer = new byte[2048];
                 try {
                     while (inputStream.available() > 0) {
                         int numBytes = inputStream.read(readBuffer);
@@ -160,7 +156,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
                     MessageDialogBox.showUnknownError();
                 }
 
-                msgBuffer = new String(readBuffer);
+                msgBuffer = new String(readBuffer);               
 
                 if (msgBuffer.indexOf("OK") != -1) {
                     hasNext = false;
@@ -199,7 +195,7 @@ final class ComPortReader implements SerialPortEventListener, Runnable {
     /**
      * @return the hasNext
      */
-    public boolean isHasNext() {
+    public boolean hasNext() {
         return hasNext;
     }
 

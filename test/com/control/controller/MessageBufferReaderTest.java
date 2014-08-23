@@ -16,59 +16,45 @@
  */
 package com.control.controller;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
 /**
- * Tests for ConcurrentReader class
  *
  * @author Kasun Amarasena
  */
-public class Test {
+public class MessageBufferReaderTest {
 
-    private static String temp;
-
-    public static void main(String[] args) throws InterruptedException {
-
-        ProcessRunner p = new ProcessRunner("COM10");
-        p.start();
-
-        //Thread.sleep(6000);
-        //p.stop();
+    public MessageBufferReaderTest() {
     }
 
-    public void test() {
+    /**
+     * Test of processMSGBuffer method, of class MessageBufferReader.
+     */
+    @Test
+    public void testProcessMSGBuffer() {
+        System.out.println("Testing processMSGBuffer()\n");
+        String st = "\n"
+                + "+CMGL: 6,\"REC READ\",\"+94715882182\",,\"14/07/26,13:12:58+22\"\n"
+                + "Testing phase 16 MessageBufferClass\n"
+                + "+CMGL: 8,\"REC READ\",\"+94715882182\",,\"14/07/26,14:38:50+22\"\n"
+                + "Testing phase 17 MessageBufferClass synchronized.\n"
+                + "+CMGL: 9,\"REC READ\",\"85115971031013265108101114116\",,\"14/07/26,17:41:00+22\"\n"
+                + "Balance Bundle : 438.78MB\n"
+                + "Unbilled Usage as at 24/07/2014 18:50:37-Rs. 0.20,\n"
+                + "Billed Due amount - Rs.185.13CR, \n"
+                + "Total amount -Rs.184.93CR  \n"
+                + "+CMGL: 10,\"REC READ\",\"85115971031013265108101114116\",,\"14/07/27,20:41:57+22\"\n"
+                + "Balance Bundle : 438.78MB\n"
+                + "Unbilled Usage as at 26/07/2014 12:59:29-Rs. 0.40,\n"
+                + "Billed Due amount - Rs.185.13CR, \n"
+                + "Total amount -Rs.184.73CR  \n"
+                + "\n"
+                + "OK";
+        MessageBufferReader m = new MessageBufferReader(null, null);
+        m.processMSGBuffer(st);
 
-        try {
-            PrintStream ps = new PrintStream("E:\\Projects & Research\\Electricity Billing Project\\sample.txt");
-            System.setOut(ps);
-            System.setErr(ps);
-        } catch (FileNotFoundException ex) {
-            System.out.println("XYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
-        }
-
-        final ConcurrentReader reader = new ConcurrentReader("COM10");
-        //reader.start();
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(3000);
-                        if (!reader.isReaderAlive() && !reader.isWriterAlive()) {
-                            System.out.println("Reader & Writer Threads are DEAD.!");// To LOG xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                            reader.restart();
-                        }
-                    } catch (InterruptedException ex) {
-                        System.out.println("Test.test():" + ex); // To LOG xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                    }
-                }
-            }
-        });
-        t.start();
     }
 
     public static void test3() {
@@ -130,6 +116,9 @@ public class Test {
                 msgList.add(message.trim());
             }
         }
+        System.out.println("List of Indices:" + indices);
+        System.out.println("List of details:" + info);
+        System.out.println("List of messages:" + msgList);
     }
 
     public static void test2() {
@@ -160,7 +149,5 @@ public class Test {
                 System.out.println(info[3]);
             }
         }
-
     }
-
 }

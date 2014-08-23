@@ -65,7 +65,8 @@ final class MessageBufferReader implements Runnable {
                 Logger.printInfo(this.getClass().getName(),"run","[Thread.sleep()-1]:" + ex); //logger             
                 return;
             }
-            String msgBuffer = this.comPortReader.getMsgBuffer();
+            String msgBuffer = this.comPortReader.getMsgBuffer();            
+            
             if (msgBuffer == null) {
                 continue;
             }
@@ -74,6 +75,7 @@ final class MessageBufferReader implements Runnable {
             } else {
                 tempMsgBuffer = msgBuffer;
             }
+            
             List<Integer> indices = this.processMSGBuffer(msgBuffer);
             if (indices != null) {
                 if (!indices.isEmpty()) {
@@ -81,8 +83,7 @@ final class MessageBufferReader implements Runnable {
                         try {
                             this.comPortReader.send("AT+CMGD=" + index + "\r\n");
                         } catch (InterruptedException ex) {
-                            Logger.printError(this.getClass().getName(),"run","AT DELETE:" + ex); //logger            
-
+                            Logger.printError(this.getClass().getName(),"run","AT DELETE:" + ex); //logger
                         }
                     }
                 }
@@ -102,7 +103,7 @@ final class MessageBufferReader implements Runnable {
      *
      * @param st - A string of list of messages.
      */
-    private List<Integer> processMSGBuffer(String st){
+    protected List<Integer> processMSGBuffer(String st){
         if (st.indexOf("ERROR") != -1) {
             Logger.printError(this.getClass().getName(),"processMSGBuffer","AT : ERROR"); //logger
             this.concurrentReader.stop();            
@@ -119,10 +120,11 @@ final class MessageBufferReader implements Runnable {
         List<String> msgList = new ArrayList<>();/*List of text messages*/
 
         st = st.trim();
-        String[] lines = st.split("\n");
-
+        String[] lines = st.split("\n");        
+        
         outerLoop:
-        for (int i = 0; i < lines.length; i++) {
+        for (int i = 0; i < lines.length; i++) {          
+            
             if (lines[i].startsWith("+CMGL")) {
                 lines[i] = lines[i].replaceAll("\"", "");
                 String[] data = lines[i].split(",");
@@ -170,7 +172,7 @@ final class MessageBufferReader implements Runnable {
                 }
                 msgList.add(message.trim()); // add text messages
             }
-        }
+        }        
         
         //Save to database
         try {
