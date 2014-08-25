@@ -48,7 +48,7 @@ public final class DatabaseConnection {
         try {
             con = DriverManager.getConnection("jdbc:derby:" + absPath + "/smsDB;", properties);
         } catch (SQLException ex) {
-            if (!Helper.isFound("smsDB")) {                
+            if (!Helper.isFound("smsDB")) {
                 con = createNewDatabase();
             } else {
                 Logger.printError(this.getClass().getName(), "getConnection", "Error getting connection" + ex); //logger
@@ -71,11 +71,12 @@ public final class DatabaseConnection {
             System.exit(0);
         }
     }
-/**
- * Create new database
- * 
- * @return Connection to the newly created database 
- */
+
+    /**
+     * Create new database
+     *
+     * @return Connection to the newly created database
+     */
     private Connection createNewDatabase() {
         Connection connection = null;
         try {
@@ -90,6 +91,16 @@ public final class DatabaseConnection {
             System.exit(0);
         }
         return connection;
+    }
+
+    /**
+     * Close Database Connection
+     * @throws SQLException
+     */
+    public static void close() throws SQLException {
+        if (db != null) {
+            db.con.close();
+        }
     }
 
 }

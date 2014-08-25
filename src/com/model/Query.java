@@ -52,12 +52,13 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void insert(String num, Date date, Time time, String msg) throws SQLException {
-        PreparedStatement st = con.prepareStatement(INSERT);
-        st.setString(1, num);
-        st.setDate(2, date);
-        st.setTime(3, time);
-        st.setString(4, msg);
-        st.execute();
+        try (PreparedStatement st = con.prepareStatement(INSERT)) {
+            st.setString(1, num);
+            st.setDate(2, date);
+            st.setTime(3, time);
+            st.setString(4, msg);
+            st.execute();
+        }
     }
 
     /**
@@ -82,8 +83,9 @@ public class Query {
      * @throws SQLException
      */
     public static void emptyListenerTable() throws SQLException {
-        PreparedStatement st = con.prepareStatement(EMPTY_LISTENER);
-        st.execute();
+        try (PreparedStatement st = con.prepareStatement(EMPTY_LISTENER)) {
+            st.execute();
+        }
     }
 
     /**
@@ -106,7 +108,6 @@ public class Query {
      */
     public static ResultSet select() throws SQLException {
         PreparedStatement st = con.prepareStatement(GET_INFO);
-
         st.executeQuery();
         return st.getResultSet();
     }
@@ -120,11 +121,12 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void deleteRecord(String num, Date date, Time time) throws SQLException {
-        PreparedStatement st = con.prepareStatement("delete from info where phone_no = ? and dateVar = ? and timeVar = ?");
-        st.setString(1, num);
-        st.setDate(2, date);
-        st.setTime(3, time);
-        st.execute();
+        try (PreparedStatement st = con.prepareStatement("delete from info where phone_no = ? and dateVar = ? and timeVar = ?")) {
+            st.setString(1, num);
+            st.setDate(2, date);
+            st.setTime(3, time);
+            st.execute();
+        }
     }
 
     /**
@@ -132,13 +134,15 @@ public class Query {
      * @throws SQLException
      */
     public static Date getMinDate() throws SQLException {
-        PreparedStatement st = con.prepareStatement(MIN_DATE);
-        st.executeQuery();
-        ResultSet r = st.getResultSet();
-        Date date = null;
-        if (r.next()) {
-            date = r.getDate(1);
-            //date.setMonth(date.getMonth() - 1);
+        Date date;
+        try (PreparedStatement st = con.prepareStatement(MIN_DATE)) {
+            st.executeQuery();
+            ResultSet r = st.getResultSet();
+            date = null;
+            if (r.next()) {
+                date = r.getDate(1);
+                //date.setMonth(date.getMonth() - 1);
+            }
         }
         return date;
     }
@@ -148,12 +152,14 @@ public class Query {
      * @throws SQLException
      */
     public static Date getCurrentDate() throws SQLException {
-        PreparedStatement st = con.prepareStatement(MAX_DATE);
-        st.executeQuery();
-        ResultSet r = st.getResultSet();
-        Date date = null;
-        if (r.next()) {
-            date = r.getDate(1);
+        Date date;
+        try (PreparedStatement st = con.prepareStatement(MAX_DATE)) {
+            st.executeQuery();
+            ResultSet r = st.getResultSet();
+            date = null;
+            if (r.next()) {
+                date = r.getDate(1);
+            }
         }
         return date;
     }
@@ -166,10 +172,12 @@ public class Query {
      * @throws SQLException
      */
     public static ResultSet select(Date from, Date to) throws SQLException {
-        PreparedStatement st = con.prepareStatement("select * from info where dateVar >= ? and dateVar <= ? order by dateVar desc,timeVar desc");
-        st.setDate(1, from);
-        st.setDate(2, to);
-        ResultSet executeQuery = st.executeQuery();
+        ResultSet executeQuery;
+        try (PreparedStatement st = con.prepareStatement("select * from info where dateVar >= ? and dateVar <= ? order by dateVar desc,timeVar desc")) {
+            st.setDate(1, from);
+            st.setDate(2, to);
+            executeQuery = st.executeQuery();
+        }
         return executeQuery;
     }
 
@@ -177,31 +185,32 @@ public class Query {
      * @return int of the number of records in the info table
      */
     public static int rowCount() {
-        PreparedStatement st;
-        try {
-            st = con.prepareStatement(ROW_COUNT);
-            ResultSet r = st.executeQuery();
+        try (PreparedStatement st = con.prepareStatement(ROW_COUNT);
+                ResultSet r = st.executeQuery();) {
             if (r.next()) {
                 return r.getInt(1);
             }
         } catch (SQLException ex) {
             Logger.printError("com.model.Query", "rowCount", ex.toString()); //logger
         }
+
         return 0;
     }
 
-    /**
-     * ***************Following methods were only used in the development
-     * process
+    /*
+     ****************Following methods are only used in the development process
+     *
      */
+    
     /**
      * Drop a table from the database
      *
      * @throws SQLException
      */
     static void drop(Connection connection) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("drop table info");
-        st.execute();
+        try (PreparedStatement st = connection.prepareStatement("drop table info")) {
+            st.execute();
+        }
     }
 
     /**
@@ -210,31 +219,35 @@ public class Query {
      * @throws SQLException
      */
     static void createTable(Connection connection) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("create table info (phone_no varchar(40),"
-                + "dateVar DATE,timeVar TIME, message varchar(220))");
-        st.execute();
+        try (PreparedStatement st = connection.prepareStatement("create table info (phone_no varchar(40),"
+                + "dateVar DATE,timeVar TIME, message varchar(220))")) {
+            st.execute();
+        }
     }
 
     static void createTable2(Connection connection) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("create table listener(id BOOLEAN)");
-        st.execute();
+        try (PreparedStatement st = connection.prepareStatement("create table listener(id BOOLEAN)")) {
+            st.execute();
+        }
     }
 
     static void createTrigger(Connection connection) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("create trigger trig after insert on info "
+        try (PreparedStatement st = connection.prepareStatement("create trigger trig after insert on info "
                 + "for each row "
-                + "insert into listener values (true)");
-        st.execute();
+                + "insert into listener values (true)")) {
+            st.execute();
+        }
     }
 
     static void addColumn(Connection connection) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("alter table info add column stamp timestamp default current_timestamp");
-        st.execute();
+        try (PreparedStatement st = connection.prepareStatement("alter table info add column stamp timestamp default current_timestamp")) {
+            st.execute();
+        }
     }
 
-    static void delete(Connection connection,String tableName) throws SQLException {
-        PreparedStatement st = connection.prepareStatement("delete from "+tableName);
-        st.execute();
+    static void delete(Connection connection, String tableName) throws SQLException {
+        try (PreparedStatement st = connection.prepareStatement("delete from " + tableName)) {
+            st.execute();
+        }
     }
-
 }
