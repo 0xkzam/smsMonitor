@@ -29,13 +29,11 @@ import java.awt.Color;
 import java.awt.Font;
 import static java.lang.Thread.sleep;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
-import javax.comm.CommPortIdentifier;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
@@ -53,6 +51,7 @@ public class MainUI extends javax.swing.JFrame {
     private int pageCount; //To load the to the table    
     private int rowCount; //number of data records in the database
     private List<Integer> newRows = new ArrayList<>();
+    private List<Timestamp> timeStampList = new ArrayList<>(); //To deleter records
 
     /**
      * Creates Main UI of the SMS monitor application
@@ -75,13 +74,14 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     /**
-     * Load data to JTable from Database (index starting from 1) ex: Load first
-     * 15 rows -> loadData(1,15)
+     * Load data to JTable from Database (index starting from 1) <br/>
+     * eg: Load first 15 rows -> loadData(1,15)
      *
      * @param from int starting row
      * @param to int finishing row
      */
     private void loadData(int from, int to) {
+        timeStampList.clear();
         from--;
         ResultSet r;
         try {
@@ -89,15 +89,16 @@ public class MainUI extends javax.swing.JFrame {
             for (int i = 0; r.next() && i < to; i++) {
                 if (from <= i) {
                     String[] vector = new String[4];
-                    vector[0] = Helper.formatPhoneNo(r.getString(1));
-                    vector[1] = r.getString(4);
-                    Date d = r.getDate(2);
+                    vector[0] = Helper.formatPhoneNo(r.getString("phone_no"));
+                    vector[1] = r.getString("message");
+                    Date d = r.getDate("dateVar");
                     vector[2] = d.toString();
-                    vector[3] = timeFormat.format(r.getTime(3));
+                    vector[3] = timeFormat.format(r.getTime("timeVar"));
                     tableModel.addRow(vector);
+                    timeStampList.add(r.getTimestamp("stamp"));
                 }
                 if (to == 15) {
-                    Timestamp stamp = r.getTimestamp(5);
+                    Timestamp stamp = r.getTimestamp("stamp");
                     if (isNew(stamp)) {
                         newRows.add(i);
                     }
@@ -429,14 +430,10 @@ public class MainUI extends javax.swing.JFrame {
         int[] rows = jTable.getSelectedRows();
         if (MessageDialogBox.isConfirmed()) {
             for (int i : rows) {
-                String num = Helper.reFormatPhoneNo((String) tableModel.getValueAt(i, 0));
-                Date date = Helper.stringToDate((String) tableModel.getValueAt(i, 2));
-                Time time = Helper.stringToTime((String) tableModel.getValueAt(i, 3));  
-                //System.out.println("phone:"+ num+"  date: "+date+ "  time: "+time); //testing...............
                 try {
-                    Query.deleteRecord(num, date, time);
-                    //tableModel.removeRow(i);
-                } catch (SQLException ex) {                    
+                    //Query.deleteRecord(num, date, time);
+                    Query.deleteRecord(timeStampList.get(i));
+                } catch (SQLException ex) {
                     Logger.printError(this.getClass().getName(), "deleteButtonActionPerformed", ex.toString()); //logger
                 }
             }
@@ -457,10 +454,11 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtonActionPerformed
+        timeStampList.clear();
         Date from = datePanel1.getDate();
         Date to = datePanel2.getDate();
         removeAllRows();
-        if (from.after(to)) {            
+        if (from.after(to)) {
             return;
         }
         ResultSet r;
@@ -468,12 +466,13 @@ public class MainUI extends javax.swing.JFrame {
             r = Query.select(from, to);
             for (int i = 0; r.next(); i++) {
                 String[] vector = new String[4];
-                vector[0] = Helper.formatPhoneNo(r.getString(1));
-                vector[1] = r.getString(4);
-                Date d = r.getDate(2);
+                vector[0] = Helper.formatPhoneNo(r.getString("phone_no"));
+                vector[1] = r.getString("message");
+                Date d = r.getDate("dateVar");
                 vector[2] = d.toString();
-                vector[3] = timeFormat.format(r.getTime(3));
+                vector[3] = timeFormat.format(r.getTime("timeVar"));
                 tableModel.addRow(vector);
+                timeStampList.add(r.getTimestamp("stamp"));                
             }
         } catch (SQLException ex) {
             Logger.printError(this.getClass().getName(), "filterButtonActionPerformed", ex.toString());
@@ -492,8 +491,6 @@ public class MainUI extends javax.swing.JFrame {
         if (rowCount > pageCount * 15) {
             olderButton.setEnabled(true);
         }
-
-
     }//GEN-LAST:event_newerButtonActionPerformed
 
     private void olderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_olderButtonActionPerformed
@@ -611,9 +608,8 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     /**
-     *
      * @param stamp
-     * @return true if currentStamp is later than given stamp
+     * @return true if currentStamp is later than given stamp, false otherwise
      */
     private boolean isNew(Timestamp stamp) {
         java.util.Date now = Calendar.getInstance().getTime();

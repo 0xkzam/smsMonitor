@@ -1,0 +1,5 @@
+MainUI issues
+
+1.Deleting filtered data
+      After deletion the remaining filtered data must be displayed.
+2.After reset button is clicked date panels must also be reset.                      

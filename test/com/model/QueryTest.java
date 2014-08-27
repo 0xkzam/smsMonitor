@@ -19,6 +19,7 @@ package com.model;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Time;
+import java.sql.Timestamp;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -42,17 +43,18 @@ public class QueryTest {
             String num = select.getString("phone_no");
             Date date = select.getDate("dateVar");
             Time time = select.getTime("timeVar");
+            Timestamp stamp = select.getTimestamp("stamp");
 
-            System.out.println("phone:"+ num+"  date: "+date+ "  time: "+time);
+            System.out.println("phone:"+ num+"  date: "+date+ "  time: "+time+"  stamp: "+stamp);
             //Query.deleteRecord(num, date, time);
 
         }
-        
-        if(select.next()){
-            Assert.assertFalse("Delete statement error", true);
-        }else{
-            System.out.println("Success");
-        }
+//        ResultSet r = Query.select();
+//        if(r.next()){
+//            Assert.assertFalse("Delete statement error", true);
+//        }else{
+//            System.out.println("Success");
+//        }
 
     }
 

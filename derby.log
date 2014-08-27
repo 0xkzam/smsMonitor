@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Wed Aug 27 18:10:52 IST 2014:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0148-177b-a406-000000a0b328 
+Wed Aug 27 20:59:31 IST 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.3.0 - (1405108): instance a816c00e-0148-1816-0db6-000000a0a530 
 on database directory E:\Projects & Research\TextMessageProject\smsDB  with class loader sun.misc.Launcher$AppClassLoader@1a7bf11 
 Loaded from file:/C:/Program%20Files/Java/jdk1.7.0_45/db/lib/derby.jar
 java.vendor=Oracle Corporation

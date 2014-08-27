@@ -24,7 +24,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * This class provides static methods for database interactions
@@ -41,21 +43,28 @@ public class Query {
     private final static String MAX_DATE = "select max(dateVar) from info";
     private final static String ROW_COUNT = "select count(phone_no) from info";
     private final static String GET_INFO_BY_DATE_RANGE = "select * from info where dateVar >= ? and dateVar <= ? order by dateVar desc,timeVar desc";
-    private final static String DELETE_RECORD = "delete from info where phone_no = ? and dateVar = ? and timeVar = ?";
+    private final static String DELETE_RECORD = "delete from info where stamp = ?";
 
     private static final Connection con = DatabaseConnection.getInstance();
-    private static PreparedStatement st_insert, st_emptyListener, st_selectFromListner, st_getInfo;
 
-    static {
-        try {
-            st_insert = con.prepareStatement(INSERT);
-            st_emptyListener = con.prepareStatement(EMPTY_LISTENER);
-            st_selectFromListner = con.prepareStatement(GET_LISTENER);
-            st_getInfo = con.prepareStatement(GET_INFO);
-        } catch (SQLException ex) {
-
-        }
-    }
+//    // Frequently used statements
+//    private static PreparedStatement st_insert, st_emptyListener, st_selectFromListner, st_getInfo;
+//
+//    //Unsure about this modification using static block
+//    //
+//    static {
+//        try {
+//            st_insert = con.prepareStatement(INSERT);
+//            st_emptyListener = con.prepareStatement(EMPTY_LISTENER);
+//            st_selectFromListner = con.prepareStatement(GET_LISTENER);
+//            st_getInfo = con.prepareStatement(GET_INFO);
+//        } catch (SQLException ex) {
+//            try {
+//                con.close();
+//            } catch (SQLException ex1) {                
+//            }
+//        }
+//    }
 
     /**
      * Execute INSERT statement for incoming text messages
@@ -67,11 +76,13 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void insert(String num, Date date, Time time, String msg) throws SQLException {
-        st_insert.setString(1, num);
-        st_insert.setDate(2, date);
-        st_insert.setTime(3, time);
-        st_insert.setString(4, msg);
-        st_insert.execute();
+        try (PreparedStatement st_insert = con.prepareStatement(INSERT)) {
+            st_insert.setString(1, num);
+            st_insert.setDate(2, date);
+            st_insert.setTime(3, time);
+            st_insert.setString(4, msg);
+            st_insert.execute();
+        }
     }
 
     /**
@@ -84,15 +95,16 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void insert(List<String> numList, List<Date> dateList, List<Time> timeList, List<String> msgList) throws SQLException {
-        for (int i = 0; i < numList.size(); i++) {
-            st_insert.setString(1, numList.get(i));
-            st_insert.setDate(2, dateList.get(i));
-            st_insert.setTime(3, timeList.get(i));
-            st_insert.setString(4, msgList.get(i));
-            st_insert.addBatch();
+        try (PreparedStatement st_insert = con.prepareStatement(INSERT)) {
+            for (int i = 0; i < numList.size(); i++) {
+                st_insert.setString(1, numList.get(i));
+                st_insert.setDate(2, dateList.get(i));
+                st_insert.setTime(3, timeList.get(i));
+                st_insert.setString(4, msgList.get(i));
+                st_insert.addBatch();
+            }
+            st_insert.executeBatch();
         }
-        st_insert.executeBatch();
-
     }
 
     /**
@@ -102,6 +114,7 @@ public class Query {
      * @throws SQLException
      */
     public static void emptyListenerTable() throws SQLException {
+        PreparedStatement st_emptyListener = con.prepareStatement(EMPTY_LISTENER);
         st_emptyListener.execute();
     }
 
@@ -112,6 +125,7 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static ResultSet selectFromListener() throws SQLException {
+        PreparedStatement st_selectFromListner = con.prepareStatement(GET_LISTENER);
         st_selectFromListner.executeQuery();
         return st_selectFromListner.getResultSet();
     }
@@ -123,12 +137,15 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static ResultSet select() throws SQLException {
+        PreparedStatement st_getInfo = con.prepareStatement(GET_INFO);
         st_getInfo.executeQuery();
         return st_getInfo.getResultSet();
     }
 
     /**
-     * Delete the specified record from the database.
+     *
+     * BUGGY Code - Use the other method instead Delete the specified record
+     * from the database.
      *
      * @param num String phone number
      * @param date java.sql.Date
@@ -136,15 +153,25 @@ public class Query {
      * @throws java.sql.SQLException
      */
     public static void deleteRecord(String num, Date date, Time time) throws SQLException {
-        System.out.println("phone:" + num + "  date: " + date + "  time: " + time); //testing...............
-        //PreparedStatement st = con.prepareStatement(DELETE_RECORD);
-        String q = "delete from info where phone_no = ? and dateVar = ? and timeVar = ?";
-        PreparedStatement st = con.prepareStatement(q);
-        st.setString(1, num);
-        st.setDate(2, date);
-        st.setTime(3, time);
-        st.execute();
+        try (PreparedStatement st = con.prepareStatement("select * from info where phone_no = ? and dateVar = ? and timeVar = ?")) {
+            st.setString(1, num);
+            st.setDate(2, date);
+            st.setTime(3, time);
+            st.execute();
+        }
+    }
 
+    /**
+     * Delete the specified record from the database.
+     *
+     * @param stamp java.sql.TimeStamp
+     * @throws SQLException
+     */
+    public static void deleteRecord(Timestamp stamp) throws SQLException {
+        try (PreparedStatement st = con.prepareStatement(DELETE_RECORD)) {
+            st.setTimestamp(1, stamp);
+            st.execute();
+        }
     }
 
     /**
@@ -152,14 +179,12 @@ public class Query {
      * @throws SQLException
      */
     public static Date getMinDate() throws SQLException {
-        Date date;
+        Date date = null;
         try (PreparedStatement st = con.prepareStatement(MIN_DATE)) {
             st.executeQuery();
             ResultSet r = st.getResultSet();
-            date = null;
             if (r.next()) {
                 date = r.getDate(1);
-                //date.setMonth(date.getMonth() - 1);
             }
         }
         return date;
@@ -190,12 +215,10 @@ public class Query {
      * @throws SQLException
      */
     public static ResultSet select(Date from, Date to) throws SQLException {
-        ResultSet executeQuery;
-        try (PreparedStatement st = con.prepareStatement(GET_INFO_BY_DATE_RANGE)) {
-            st.setDate(1, from);
-            st.setDate(2, to);
-            executeQuery = st.executeQuery();
-        }
+        PreparedStatement st = con.prepareStatement(GET_INFO_BY_DATE_RANGE);
+        st.setDate(1, from);
+        st.setDate(2, to);
+        ResultSet executeQuery = st.executeQuery();
         return executeQuery;
     }
 
@@ -203,8 +226,9 @@ public class Query {
      * @return int of the number of records in the info table
      */
     public static int rowCount() {
-        try (PreparedStatement st = con.prepareStatement(ROW_COUNT);
-                ResultSet r = st.executeQuery();) {
+        try {
+            PreparedStatement st = con.prepareStatement(ROW_COUNT);
+            ResultSet r = st.executeQuery();
             if (r.next()) {
                 return r.getInt(1);
             }
@@ -225,7 +249,7 @@ public class Query {
      * @throws SQLException
      */
     static void createSMSDB(Connection connection) throws SQLException {
-        //connection.setAutoCommit(false);
+        connection.setAutoCommit(false);
         Statement st = connection.createStatement();
         st.addBatch("create table info (phone_no varchar(40),dateVar DATE,timeVar TIME, message varchar(220), stamp timestamp default current_timestamp )");
         st.addBatch("create table listener(id BOOLEAN)");
@@ -234,7 +258,7 @@ public class Query {
                 + "insert into listener values (true)");
         st.executeBatch();
         connection.commit();
-        //connection.setAutoCommit(true);
+        connection.setAutoCommit(true);
 
     }
 

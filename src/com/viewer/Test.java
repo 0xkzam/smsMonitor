@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.model;
+package com.viewer;
 
-import java.io.Closeable;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,37 +25,6 @@ import java.io.Closeable;
 public class Test {
 
     public static void main(String[] args) {
-
-        try (A a = new A()) {
-            
-            a.test(0);
-            
-        } catch (Exception ex) {
-            System.out.println("catch:"+ex);
-        }
-    }
-
-}
-
-
-
-
-class A implements Closeable {
-
-    A() {
-        System.out.println("A constructor");
-    }
-
-    public void test(int i) throws Exception {
-        if (i == 0) {
-            throw new Exception("i == 0");
-        }
-        System.out.println("testing try-with-resources");
-
-    }
-
-    @Override
-    public void close() {
-        System.out.println("A Closing......");
+        MessageDialogBox.aboutPage();
     }
 }
