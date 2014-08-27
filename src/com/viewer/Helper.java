@@ -17,8 +17,6 @@
 package com.viewer;
 
 import com.control.helper.Logger;
-import java.io.File;
-import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
@@ -90,21 +88,4 @@ public class Helper {
         }
         return null;
     }
-
-    /**
-     * Search for folder or file in the current directory
-     * @param name Folder of file name
-     * @return true is folder/file name exists, false otherwise
-     */
-    public static boolean isFound(String name) {
-        String absPath = Paths.get("").toAbsolutePath().toString();
-        File dir = new File(absPath);
-        for (String s : dir.list()) {
-            if (s.equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

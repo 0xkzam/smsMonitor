@@ -6,8 +6,9 @@
 package com.model;
 
 import com.control.helper.Logger;
-import com.viewer.Helper;
+import com.control.helper.Utility;
 import com.viewer.MessageDialogBox;
+import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,15 +19,14 @@ import java.util.Properties;
  *
  * @author Kasun Amarasena
  */
-public final class DatabaseConnection {
+public final class DatabaseConnection{
 
-    private Connection con;
-    private static final DatabaseConnection db = new DatabaseConnection();
+    private Connection con;    
     private String absPath;
     private Properties properties;
+    private static final DatabaseConnection db = new DatabaseConnection();
 
-    public DatabaseConnection() {
-
+    DatabaseConnection() {
         absPath = Paths.get("").toAbsolutePath().toString();
         properties = new Properties();
         properties.setProperty("user", "kasun");
@@ -46,12 +46,13 @@ public final class DatabaseConnection {
         this.loadDriver();
 
         try {
-            con = DriverManager.getConnection("jdbc:derby:" + absPath + "/smsDB;", properties);
+            con = DriverManager.getConnection("jdbc:derby:" + absPath + "\\smsDB;", properties);
         } catch (SQLException ex) {
-            if (!Helper.isFound("smsDB")) {
+            
+            if (!Utility.isFound("smsDB",absPath)) {
                 con = createNewDatabase();
             } else {
-                Logger.printError(this.getClass().getName(), "getConnection", "Error getting connection" + ex); //logger
+                Logger.printError(this.getClass().getName(), "getConnection", "Error getting connection:" + ex); //logger
                 MessageDialogBox.showErrorMessage("Error occured while connecting the database!", "ERROR!");
                 System.exit(0);
             }
@@ -81,13 +82,15 @@ public final class DatabaseConnection {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:derby:" + absPath + "/smsDB;create=true;", properties);
-            Query.createTable(connection);
-            Query.createTable2(connection);
-            Query.addColumn(connection);
-            Query.createTrigger(connection);
+            Query.createSMSDB(connection);
         } catch (SQLException ex) {
             Logger.printError(this.getClass().getName(), "createNewDatabase", "Error getting connection" + ex); //logger
             MessageDialogBox.showErrorMessage("Error occured while creating new database!", "ERROR!");
+            try {
+                Utility.deleteFile(new File(absPath+""));
+            } catch (IllegalAccessException ex1) {
+                Logger.printError(this.getClass().getName(), "createNewDatabase", "Could not delete folder" + ex); //logger
+            }
             System.exit(0);
         }
         return connection;

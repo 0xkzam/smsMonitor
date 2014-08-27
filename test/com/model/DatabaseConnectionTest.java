@@ -14,9 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.model;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import junit.framework.Assert;
 import org.junit.Test;
 
 /**
@@ -24,7 +27,7 @@ import org.junit.Test;
  * @author Kasun Amarasena
  */
 public class DatabaseConnectionTest {
-    
+
     public DatabaseConnectionTest() {
     }
 
@@ -32,7 +35,26 @@ public class DatabaseConnectionTest {
      * Test of getInstance method, of class DatabaseConnection.
      */
     @Test
-    public void testGetInstance() { 
+    public void testGetInstance() {
+        Connection con = DatabaseConnection.getInstance();
+        DatabaseMetaData metaData = null;
+        try {
+            metaData = con.getMetaData();
+        } catch (SQLException ex) {
+            Assert.assertFalse("database access error or closed connection", true);
+        }
+        try {
+            System.out.println("DB product name: "+metaData.getDatabaseProductName());            
+            System.out.println("DB product version: "+metaData.getDatabaseProductVersion());
+            System.out.println("DB product driver name: "+metaData.getDriverName());
+            System.out.println("DB product driver version: "+metaData.getDriverVersion());
+            System.out.println("Batch update support: "+metaData.supportsBatchUpdates());            
+            
+        } catch (SQLException ex) {
+            Assert.assertFalse("database access error", true);
+        }
+        
+        
     }
-    
+
 }

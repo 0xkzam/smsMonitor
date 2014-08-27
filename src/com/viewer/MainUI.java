@@ -431,11 +431,12 @@ public class MainUI extends javax.swing.JFrame {
             for (int i : rows) {
                 String num = Helper.reFormatPhoneNo((String) tableModel.getValueAt(i, 0));
                 Date date = Helper.stringToDate((String) tableModel.getValueAt(i, 2));
-                Time time = Helper.stringToTime((String) tableModel.getValueAt(i, 3));
-                tableModel.removeRow(i);
+                Time time = Helper.stringToTime((String) tableModel.getValueAt(i, 3));  
+                //System.out.println("phone:"+ num+"  date: "+date+ "  time: "+time); //testing...............
                 try {
                     Query.deleteRecord(num, date, time);
-                } catch (SQLException ex) {
+                    //tableModel.removeRow(i);
+                } catch (SQLException ex) {                    
                     Logger.printError(this.getClass().getName(), "deleteButtonActionPerformed", ex.toString()); //logger
                 }
             }
@@ -459,7 +460,7 @@ public class MainUI extends javax.swing.JFrame {
         Date from = datePanel1.getDate();
         Date to = datePanel2.getDate();
         removeAllRows();
-        if (from.after(to)) {
+        if (from.after(to)) {            
             return;
         }
         ResultSet r;
