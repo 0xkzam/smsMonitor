@@ -75,7 +75,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
      * @param command String
      * @throws java.io.IOException
      */
-    public void send(String command) throws IOException {
+    public synchronized void send(String command) throws IOException {
         outputStream.write(command.getBytes());
     }
 
@@ -85,7 +85,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
      * @param command byte[]
      * @throws IOException
      */
-    public void send(byte[] command) throws IOException {
+    public synchronized void send(byte[] command) throws IOException {
         outputStream.write(command);
     }
 
@@ -95,7 +95,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
      * @param command int
      * @throws IOException
      */
-    public void send(int command) throws IOException {
+    public synchronized void send(int command) throws IOException {
         outputStream.write(command);
     }
 
@@ -123,6 +123,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
                 }
                 setChanged();
                 notifyObservers(this.readBuffer);
+                
                 break;
         }
     }

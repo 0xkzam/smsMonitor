@@ -24,23 +24,24 @@ import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
 
 /**
- * This class acts as the interface between ComPorts and the User.
+ * This class acts as the interface between ComPorts and the Client.
  *
  * @author Kasun Amarasena
  */
 public final class ComPortConnector {
 
     //Map of connected ports
-    private HashMap<CommPortIdentifier, ComPort> ports;
-    //Map of observers observing the connected ports
-    private HashMap<CommPortIdentifier, ComPortObserver> observers;
+    private HashMap<String, ComPort> ports;
 
     private ComPortConnector() {
         ports = new HashMap<>();
-        observers = new HashMap<>();
     }
 
+    /**
+     * ComPortConnector singleton holder
+     */
     private static class ComPortConnectorHolder {
+
         private static final ComPortConnector connector = new ComPortConnector();
     }
 
@@ -52,20 +53,35 @@ public final class ComPortConnector {
         return ComPortConnectorHolder.connector;
     }
 
-    public boolean connectTo(CommPortIdentifier portID) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
-        boolean contains = ports.containsKey(portID);
-        if (!contains) {
-            ComPort port = new ComPort(portID);
-            MyComPortObserver observer = new MyComPortObserver();
-            port.addObserver(observer);
-            ports.put(portID, port);
-            observers.put(portID, observer);
-            return true;
+    /**
+     * Connect to a com port, if a connection already already exists returns the
+     * existing instance
+     *
+     * @param portID CommPortIdentifier
+     * @return ComPort instance associated with the PortID
+     *
+     * @throws NoSuchPortException
+     * @throws IOException
+     * @throws PortInUseException
+     * @throws TooManyListenersException
+     */
+    public ComPort connectTo(CommPortIdentifier portID) throws NoSuchPortException, IOException, PortInUseException, TooManyListenersException {
+        synchronized (portID) {
+            boolean contains = ports.containsKey(portID.getName());
+            if (!contains) {
+                ComPort port = new ComPort(portID);
+                ports.put(portID.getName(), port);
+                return port;
+            } else if (contains) {
+                return ports.get(portID.getName());
+            }
         }
-        return false;
+        return null;
     }
 
-    public void send(CommPortIdentifier id,String command) throws IOException {
-        this.ports.get(id).send(command);
+    public void send(CommPortIdentifier portID, String command) throws IOException {
+        synchronized (portID) {
+            this.ports.get(portID.getName()).send(command);
+        }
     }
 }

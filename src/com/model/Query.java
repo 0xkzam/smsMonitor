@@ -26,7 +26,6 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * This class provides static methods for database interactions
