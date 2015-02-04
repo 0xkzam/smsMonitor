@@ -3,6 +3,7 @@ package com.kuz.tmp.model;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Message DAO class
@@ -61,6 +62,32 @@ public class Message {
 
     public void setStamp(Timestamp stamp) {
         this.stamp = stamp;
+    }    
+
+   
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.sentDate);
+        hash = 67 * hash + Objects.hashCode(this.stamp);
+        return hash;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Message other = (Message) obj;
+        if (!Objects.equals(this.sentDate, other.sentDate)) {
+            return false;
+        }
+        return Objects.equals(this.stamp, other.stamp);
+    }
+    
     
 }
