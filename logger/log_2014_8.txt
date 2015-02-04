@@ -1,2 +1,0 @@
-Aug 17, 2014 2:25:03 AM com.control.new_controller.ComPortReader serialEvet
-SEVERE: AT ERROR
