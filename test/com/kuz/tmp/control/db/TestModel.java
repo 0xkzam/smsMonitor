@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.kuz.tmp.old.model;
+package com.kuz.tmp.control.db;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -31,14 +33,22 @@ public class TestModel {
     public TestModel() {
     }
     
-    @BeforeClass
-    public  static void beforeClass(){
-        logger = Logger.getLogger(TestModel.class);
-    }
-
     @Test
-    public void test() {       
+    public void test() {    
         
-        logger.info("testing logger");
+        
+        
+        Date utilDate = new Date();
+        System.out.println("util date:"+utilDate);
+        
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        System.out.println("sql date:"+sqlDate);
+        
+        java.sql.Time sqlTime = new Time(utilDate.getTime());
+        System.out.println("sql time:"+sqlTime);
+        
+        System.out.println("sql date converted to util:"+new Date(sqlDate.getTime()));
+        System.out.println("sql time converted to util:"+new Date(sqlTime.getTime()));
+        
     }
 }

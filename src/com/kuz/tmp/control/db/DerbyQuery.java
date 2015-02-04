@@ -4,9 +4,10 @@ import com.kuz.tmp.model.Message;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -20,13 +21,14 @@ public final class DerbyQuery implements Query {
     private final Connection connection = new DerbyDBConnection().getConnection();
     private final Logger logger = Logger.getLogger(DerbyQuery.class);
 
-    private final static String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?, ?)";
-    private final static String GET_MESSAGES = "select * from MESSAGE order by DATEVAR desc,TIMEVAR desc";
-    private final static String GET_MIN_DATE = "select min(DATEVAR) from MESSAGE";
-    private final static String GET_MAX_DATE = "select max(DATEVAR) from MESSAGE";
+    //PHONENO VARCHAR(12),CONTENTS VARCHR(220), SENT_TIMESTAMP TIMESTAMP, RECEIVED_TIMESTAMP TIMESTAMP
+    private final static String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?)";
+    private final static String GET_MESSAGES = "select * from MESSAGE order by SENT_TIMESTAMP desc";
+    private final static String GET_MIN_DATE = "select min(SENT_TIMESTAMP) from MESSAGE";
+    private final static String GET_MAX_DATE = "select max(SENT_TIMESTAMP) from MESSAGE";
     private final static String GET_ROW_COUNT = "select count(PHONENO) from MESSAGE";
-    private final static String GET_MESSAGES_BY_DATE_RANGE = "select * from MESSAGES where DATEVAR >= ? and DATAVAR <= ? order by DATEVAR desc,TIMEVAR desc";
-    private final static String DELETE_MESSAGE= "delete from MESSAGE where STAMP = ?";
+    private final static String GET_MESSAGES_BY_DATE_RANGE = "select * from MESSAGES where SENT_TIMESTAMP >= ? and SENT_TIMESTAMP <= ? order by SENT_TIMESTAMP desc";
+    private final static String DELETE_MESSAGE = "delete from MESSAGE where RECEIVED_TIMESTAMP = ?";
 
     @Override
     public boolean insert(Message message) {
@@ -34,10 +36,9 @@ public final class DerbyQuery implements Query {
         try (PreparedStatement st = connection.prepareStatement(INSERT_MESSAGE);) {
             connection.setAutoCommit(false);
             st.setString(1, message.getNumber());
-            st.setDate(2, new Date(message.getDate().getTime()));
-            st.setTime(3, new Time(message.getDate().getTime()));
-            st.setString(4, message.getMessage());
-            st.setTimestamp(5, message.getStamp());
+            st.setString(2, message.getContents());
+            st.setTimestamp(3, new Timestamp(message.getSentDate().getTime()));
+            st.setTimestamp(4, message.getStamp());
             st.execute();
             connection.commit();
         } catch (SQLException ex) {
@@ -64,13 +65,12 @@ public final class DerbyQuery implements Query {
             connection.setAutoCommit(false);
             for (Message message : messages) {
                 st.setString(1, message.getNumber());
-                st.setDate(2, new Date(message.getDate().getTime()));
-                st.setTime(3, new Time(message.getDate().getTime()));
-                st.setString(4, message.getMessage());
-                st.setTimestamp(5, message.getStamp());
-                st.addBatch();                
+                st.setString(2, message.getContents());
+                st.setTimestamp(3, new Timestamp(message.getSentDate().getTime()));
+                st.setTimestamp(4, message.getStamp());
+                st.addBatch();
             }
-            info = st.executeBatch();                  
+            info = st.executeBatch();
             connection.commit();
         } catch (SQLException ex) {
             logger.error("Error inserting message", ex);
@@ -90,11 +90,11 @@ public final class DerbyQuery implements Query {
     }
 
     @Override
-    public boolean delete(Timestamp stamp) {
+    public boolean delete(Timestamp receivedStamp) {
         boolean success = true;
-        try(PreparedStatement st = connection.prepareStatement(DELETE_MESSAGE)){
+        try (PreparedStatement st = connection.prepareStatement(DELETE_MESSAGE)) {
             connection.setAutoCommit(false);
-            st.setTimestamp(1, stamp);
+            st.setTimestamp(1, receivedStamp);
             st.execute();
             connection.commit();
         } catch (SQLException ex) {
@@ -104,7 +104,7 @@ public final class DerbyQuery implements Query {
             } catch (SQLException ex1) {
                 logger.error("Error rolling back", ex1);
             }
-        }finally{
+        } finally {
             try {
                 connection.setAutoCommit(false);
             } catch (SQLException ex) {
@@ -115,15 +115,66 @@ public final class DerbyQuery implements Query {
     }
 
     @Override
-    public int[] delete(List<Timestamp> stamps) {
-           int[] info = null;
-           
-           return info;
+    public int[] delete(List<Timestamp> receivedStamps) {
+        int[] info = null;
+        try (PreparedStatement st = connection.prepareStatement(DELETE_MESSAGE)) {
+            connection.setAutoCommit(false);
+            for (Timestamp stamp : receivedStamps) {
+                st.setTimestamp(1, stamp);
+                st.addBatch();
+            }
+            info = st.executeBatch();
+            connection.commit();
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                logger.error("Error rolling back", ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(false);
+            } catch (SQLException ex) {
+                logger.error("Error setting auto commit", ex);
+            }
+        }
+        return info;
     }
 
     @Override
     public List<Message> selectFromRange(Date startDate, Date endDate) {
-        return null;
+        List<Message> messages = new ArrayList<>();
+        ResultSet rs = null;
+        try (PreparedStatement st = connection.prepareStatement(GET_MESSAGES_BY_DATE_RANGE)) {
+            connection.setAutoCommit(false);
+            st.setTimestamp(1, new Timestamp(startDate.getTime()));
+            st.setTimestamp(2, new Timestamp(endDate.getTime()));
+            rs = st.executeQuery();
+            connection.commit();
+        } catch (SQLException ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                logger.error("Error rolling back", ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(false);
+            } catch (SQLException ex) {
+                logger.error("Error setting auto commit", ex);
+            }
+        }
+        if (rs != null) {
+            try {
+                while (rs.next()) {
+                    Message m = new Message(rs.getString(1), rs.getString(2), new Date(rs.getTimestamp(3).getTime()), rs.getTimestamp(4));
+                    messages.add(m);
+                }
+            } catch (SQLException ex) {
+                logger.error("Error reading ResultSet", ex);
+            }
+        }
+        return messages;
     }
 
     @Override

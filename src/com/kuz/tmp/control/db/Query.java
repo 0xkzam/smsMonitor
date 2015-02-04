@@ -22,21 +22,21 @@ public interface Query {
     /**
      * Insert a List of Message objects
      * @param messages List<Message> 
-     * @return 
+     * @return int array - refer to <code>java.sql.Statement.executeBatch</code>
      */
     int[] insert(List<Message> messages);
     
     /**
      * Delete message from the database
      * @param stamp Timestamp
-     * @return 
+     * @return true if successful, false otherwise
      */
     boolean delete(Timestamp stamp);
     
     /**
      * Delete list of messages from the database
      * @param stamps List<Timestamp>
-     * @return true if successful, false otherwise
+     * @return int array - refer to <code>java.sql.Statement.executeBatch</code>
      */
     int[] delete(List<Timestamp> stamps);
     
