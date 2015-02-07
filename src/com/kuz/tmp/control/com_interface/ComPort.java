@@ -15,16 +15,8 @@ import javax.comm.SerialPortEventListener;
 import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
 
-
-
 /**
- * This class is used to Access a COM port with a Serial interface and is the
- * predecessor of com.control.controller.ComPortReader class. The multi-threaded
- * nature and the tight coupling caused by that are removed, instead Observers are
- * used. This has lead to much more cleaner code.
- *
- * I wanted to generalize process of sending various commands to Com ports.
- * Needs to be tested using various devices.
+ * This class is a wrapper around a COM port with a Serial interface.
  *
  * @author Kasun Amarasena
  */

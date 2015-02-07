@@ -2,7 +2,7 @@
 package com.kuz.tmp.control.com_interface;
 
 import com.kuz.tmp.control.com_interface.ComPort;
-import com.kuz.tmp.control.com_interface.MyComPortObserver;
+import com.kuz.tmp.control.com_interface.ComPortObserverImpl;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 import javax.comm.CommPortIdentifier;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  */
 public class ComPortTest {    
     private static ComPort comport;
-    private static MyComPortObserver obs;
+    private static ComPortObserverImpl obs;
     
     public ComPortTest() {
     }
@@ -31,7 +31,7 @@ public class ComPortTest {
         } catch (NoSuchPortException | PortInUseException | IOException | TooManyListenersException ex) {
             assertFalse("Specified port may not be available:"+ex, true);
         }
-        obs = new MyComPortObserver();
+        obs = new ComPortObserverImpl();
         comport.addObserver(obs);
     }
     

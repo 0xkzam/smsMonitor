@@ -23,16 +23,16 @@ public abstract class ComPortObserver implements Observer {
      */
     @Override
     public void update(Observable o, Object inputBuffer) {
-        if (inputBuffer instanceof byte[]) {
-            update(o, (byte[]) inputBuffer);
+        if (o instanceof  ComPort && inputBuffer instanceof byte[]) {
+            update((ComPort)o, (byte[]) inputBuffer);
         }
     }
 
     /**
      * This method is called whenever the observed object is changed.
      *
-     * @param o the observable object
+     * @param port Comport
      * @param inputBuffer buffer of bytes from the comport
      */
-    public abstract void update(Observable o, byte[] inputBuffer);
+    public abstract void update(ComPort port, byte[] inputBuffer);
 }

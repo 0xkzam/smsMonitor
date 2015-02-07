@@ -16,7 +16,7 @@
  */
 package com.kuz.tmp.control.com_interface;
 
-import com.kuz.tmp.control.com_interface.MyComPortObserver;
+import com.kuz.tmp.control.com_interface.ComPortObserverImpl;
 import java.util.Observable;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class ComPortObserverTest {
         byte[] b2 = (byte[])o;
         
         System.out.println("Testing MyComportObserver.update()");
-        new MyComPortObserver().update(new Observable(), b2);
+        new ComPortObserverImpl().update(new Observable(), b2);
     }
 
 }
