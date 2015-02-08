@@ -2,7 +2,7 @@
 package com.kuz.tmp.control.db;
 
 import com.kuz.tmp.model.Message;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -44,17 +44,29 @@ public interface Query {
      * 
      * @param startDate
      * @param endDate
-     * @return List of Messages in the specified range
+     * @return List of Messages in the specified date range
      */
-    List<Message> selectFromRange(Date startDate, Date endDate);
+    List<Message> getMessagesFromRange(Date startDate, Date endDate);
     
     /**
      * 
      * @param startRow int
      * @param endRow int
-     * @return List of Messages in the specified range
+     * @return List of Messages in the specified row range
      */
-    List<Message> selectFromRange(int startRow, int endRow);
+    List<Message> getMessagesFromRange(int startRow, int endRow);
+    
+    /**
+     * 
+     * @return Date of the earliest Message received
+     */
+    Date getMinDate();
+    
+    /**
+     * 
+     * @return Date of the latest Messages received
+     */
+    Date getMaxDate();
     
     
 }

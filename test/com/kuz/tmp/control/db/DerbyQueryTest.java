@@ -97,7 +97,7 @@ public class DerbyQueryTest {
 //        Date endDate = null;
 //        DerbyQuery instance = new DerbyQuery();
 //        List<Message> expResult = null;
-//        List<Message> result = instance.selectFromRange(startDate, endDate);
+//        List<Message> result = instance.getMessagesFromRange(startDate, endDate);
 //        assertEquals(expResult, result);
         
     }
@@ -109,7 +109,7 @@ public class DerbyQueryTest {
 //        int endRow = 0;
 //        DerbyQuery instance = new DerbyQuery();
 //        List<Message> expResult = null;
-//        List<Message> result = instance.selectFromRange(startRow, endRow);
+//        List<Message> result = instance.getMessagesFromRange(startRow, endRow);
        
     }
     

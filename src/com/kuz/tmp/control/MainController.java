@@ -5,6 +5,8 @@ package com.kuz.tmp.control;
 import com.kuz.tmp.control.db.Query;
 import com.kuz.tmp.model.Message;
 import com.kuz.tmp.view.MainUI;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,13 +28,16 @@ public class MainController implements MainUIListener{
    
 
     @Override
-    public void deleteAction(MainUIEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int[] deleteAction(MainUIEvent event) {
+        List<Timestamp> selected = event.getSelected();
+        return model.delete(selected);
     }
 
     @Override
     public List<Message> filterAction(MainUIEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Date dateFrom = event.getDateFrom();
+        Date dateTo = event.getDateTo();
+        return model.getMessagesFromRange(dateFrom,dateTo);
     }
 
     @Override

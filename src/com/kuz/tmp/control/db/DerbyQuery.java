@@ -2,7 +2,7 @@ package com.kuz.tmp.control.db;
 
 import com.kuz.tmp.model.Message;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -142,7 +142,7 @@ public final class DerbyQuery implements Query {
     }
 
     @Override
-    public List<Message> selectFromRange(Date startDate, Date endDate) {
+    public List<Message> getMessagesFromRange(Date startDate, Date endDate) {
         List<Message> messages = new ArrayList<>();
         ResultSet rs = null;
         try (PreparedStatement st = connection.prepareStatement(GET_MESSAGES_BY_DATE_RANGE)) {
@@ -178,8 +178,36 @@ public final class DerbyQuery implements Query {
     }
 
     @Override
-    public List<Message> selectFromRange(int startRow, int endRow) {
-        return null;
+    public List<Message> getMessagesFromRange(int startRow, int endRow) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Date getMinDate() {
+        Date date = null;
+        try (PreparedStatement st = connection.prepareStatement(GET_MIN_DATE)) {
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getDate(1);
+            }
+        } catch (SQLException ex) {
+            logger.error("Error reading ResultSet-getMinDate", ex);
+        }
+        return date;
+    }
+
+    @Override
+    public Date getMaxDate() {
+        Date date = null;
+        try (PreparedStatement st = connection.prepareStatement(GET_MAX_DATE)) {
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                return rs.getDate(1);
+            }
+        } catch (SQLException ex) {
+            logger.error("Error reading ResultSet-getMaxDate", ex);
+        }
+        return date;
     }
 
 }

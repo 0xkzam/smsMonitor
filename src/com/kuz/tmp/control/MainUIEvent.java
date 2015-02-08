@@ -1,23 +1,26 @@
-
 package com.kuz.tmp.control;
 
 import com.kuz.tmp.model.Message;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Contains all Event info of MainUI
- * 
+ *
  * @author Kasun Amarasena
  */
-public class MainUIEvent {
-    
+public class MainUIEvent extends Observable{
+
     private List<Message> currentMessages;
-    private Date dateA;
-    private Date dateB;
+    private List<Timestamp> selected;
+    private Date dateFrom;
+    private Date dateTo;
 
     /**
-     * Get the messages currently visible on the Table 
+     * Get the messages currently visible on the Table
+     *
      * @return List<Message>
      */
     public List<Message> getCurrentMessages() {
@@ -26,49 +29,74 @@ public class MainUIEvent {
 
     /**
      * Set the messages currently visible on the Table
+     *
      * @param currentMessages List<Message>
      */
     public void setCurrentMessages(List<Message> currentMessages) {
         this.currentMessages = currentMessages;
     }
-    
+
     /**
      * Add the message to current viewing list
+     *
      * @param message Message
      */
-    public void addMessage(Message message){
+    public void addMessage(Message message) {
         currentMessages.add(message);
     }
-    
+
     /**
      * Get the currently visible date of Date panel A
+     *
      * @return util.Date
      */
-    public Date getDateA(){
-        return dateA;
+    public Date getDateFrom() {
+        return dateFrom;
     }
 
     /**
      * Set Date Panel A date
-     * @param dateA 
+     *
+     * @param dateFrom
      */
-    public void setDateA(Date dateA) {
-        this.dateA = dateA;
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
     }
 
     /**
      * Get the currently visible date of Date panel B
+     *
      * @return util.Date
      */
-    public Date getDateB() {
-        return dateB;
+    public Date getDateTo() {
+        return dateTo;
     }
 
     /**
      * Set Date Panel B date
-     * @param dateB 
+     *
+     * @param dateTo
      */
-    public void setDateB(Date dateB) {
-        this.dateB = dateB;
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
     }
+
+    /**
+     *
+     * @return List of Timestamps which corresponds to selected Messages in the
+     * Table
+     */
+    public List<Timestamp> getSelected() {
+        return selected;
+    }
+
+    /**
+     * List of Timestamps which corresponds to selected Messages in the
+     * Table
+     * @param selected 
+     */
+    public void setSelected(List<Timestamp> selected) {
+        this.selected = selected;
+    }
+
 }

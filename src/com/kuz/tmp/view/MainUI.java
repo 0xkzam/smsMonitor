@@ -1,5 +1,6 @@
 package com.kuz.tmp.view;
 
+import com.kuz.tmp.control.MainUIEvent;
 import com.kuz.tmp.control.MainUIListener;
 
 /**
@@ -9,6 +10,7 @@ import com.kuz.tmp.control.MainUIListener;
 public class MainUI extends javax.swing.JFrame {
     
     private MainUIListener mainListener;
+    private MainUIEvent mainEvent;
 
     /**
      * Creates Main UI of the SMS monitor application
@@ -19,7 +21,6 @@ public class MainUI extends javax.swing.JFrame {
         MessageDialogBox.setParentComponent(MainUI.this);
         datePanel1.setMinDate();
         datePanel2.setCurrentDate();
-
     }
 
     /**
