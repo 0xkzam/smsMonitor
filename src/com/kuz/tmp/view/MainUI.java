@@ -1,13 +1,15 @@
-
 package com.kuz.tmp.view;
+
+import com.kuz.tmp.control.MainUIListener;
 
 /**
  *
  * @author Kasun Amarasena
  */
 public class MainUI extends javax.swing.JFrame {
+    
+    private MainUIListener mainListener;
 
-   
     /**
      * Creates Main UI of the SMS monitor application
      */
@@ -17,10 +19,13 @@ public class MainUI extends javax.swing.JFrame {
         MessageDialogBox.setParentComponent(MainUI.this);
         datePanel1.setMinDate();
         datePanel2.setCurrentDate();
-        
+
     }
 
-   
+    public void addListener(MainUIListener listener) {
+        this.mainListener = listener;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -239,8 +244,6 @@ public class MainUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;

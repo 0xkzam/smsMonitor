@@ -3,7 +3,8 @@ package com.kuz.tmp.control;
 import com.kuz.tmp.view.MainUI;
 
 /**
- *
+ * 
+ * 
  * @author Kasun Amarasena
  */
 public class Main {
@@ -34,10 +35,22 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainUI().setVisible(true);
+                runApp();
             }
         });
 
+    }
+    
+    public static void runApp(){
+       
+       MainUI ui = new MainUI();
+       MainController controller = new MainController(ui);       
+       ui.addListener(controller);       
+        
+        
+        
+       ui.setVisible(true); 
+    
     }
 
 }
