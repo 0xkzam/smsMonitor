@@ -1,8 +1,5 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.model.Message;
-import java.util.List;
-
 /**
  * Listener of the MainUI implemented by MainController
  *
@@ -14,40 +11,39 @@ public interface MainUIListener {
      * Delete selected messages
      *
      * @param event MainUIEvent
-     * @return array integers indicating the successful rows effected - refer to
-     * <code>java.sql.Statement.executeBatch</code>
+     * @return true is successful, false otherwise
      */
-    int[] deleteAction(MainUIEvent event);
+    boolean deleteAction(MainUIEvent event);
 
     /**
      * Filter messages using dates specified
      *
      * @param event MainUIEvent
-     * @return List of Messages
+     * @return true is successful, false otherwise
      */
-    List<Message> filterAction(MainUIEvent event);
+    boolean filterAction(MainUIEvent event);
 
     /**
      * Get the next set of newer Messages(constant set size)
      *
      * @param event MainUIEvent
-     * @return List of Messages
+     * @return true is successful, false otherwise
      */
-    List<Message> newButtonAction(MainUIEvent event);
+    boolean newButtonAction(MainUIEvent event);
 
     /**
      * Get the next set of older Messages(constant set size)
      *
      * @param event MainUIEvent
-     * @return List of Messages
+     * @return true is successful, false otherwise
      */
-    List<Message> oldButtonAction(MainUIEvent event);
+    boolean oldButtonAction(MainUIEvent event);
 
     /**
      * Load the most resent Messages
      *
      * @param event MainUIEvent
-     * @return List of Messages
+     * @return true is successful, false otherwise
      */
-    List<Message> resetAction(MainUIEvent event);
+    boolean resetAction(MainUIEvent event);
 }

@@ -11,12 +11,14 @@ import java.util.Observable;
  *
  * @author Kasun Amarasena
  */
-public class MainUIEvent extends Observable{
+public class MainUIEvent extends Observable {
 
     private List<Message> currentMessages;
     private List<Timestamp> selected;
     private Date dateFrom;
     private Date dateTo;
+    private int startRow;
+    private int endRow;
 
     /**
      * Get the messages currently visible on the Table
@@ -91,12 +93,56 @@ public class MainUIEvent extends Observable{
     }
 
     /**
-     * List of Timestamps which corresponds to selected Messages in the
-     * Table
-     * @param selected 
+     * List of Timestamps which corresponds to selected Messages in the Table
+     *
+     * @param selected
      */
     public void setSelected(List<Timestamp> selected) {
         this.selected = selected;
+    }
+
+    /**
+     * Specifies starting row number corresponding to the RDBMS table row number
+     * sorted by the timestamp in descending order in the current set of
+     * messages of visible on the table
+     *
+     * @return start row number
+     */
+    public int getStartRow() {
+        return startRow;
+    }
+
+    /**
+     * Specifies starting row number corresponding to the RDBMS table row number
+     * sorted by the timestamp in descending order in the current set of
+     * messages of visible on the table
+     *
+     * @param startRow
+     */
+    public void setStartRow(int startRow) {
+        this.startRow = startRow;
+    }
+
+    /**
+     * Specifies ending row number corresponding to the RDBMS table row number
+     * sorted by the timestamp in descending order in the current set of
+     * messages of visible on the table
+     *
+     * @return end row number
+     */
+    public int getEndRow() {
+        return endRow;
+    }
+
+    /**
+     * Specifies ending row number corresponding to the RDBMS table row number
+     * sorted by the timestamp in descending order in the current set of
+     * messages of visible on the table
+     *
+     * @param endRow
+     */
+    public void setEndRow(int endRow) {
+        this.endRow = endRow;
     }
 
 }
