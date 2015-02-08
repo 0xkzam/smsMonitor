@@ -22,7 +22,11 @@ public class MainUI extends javax.swing.JFrame {
 
     }
 
-    public void addListener(MainUIListener listener) {
+    /**
+     *  
+     * @param listener MainUIListener
+     */
+    public void setListener(MainUIListener listener) {
         this.mainListener = listener;
     }
 

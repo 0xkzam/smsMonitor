@@ -48,7 +48,7 @@ public class Main {
        
        MainUI ui = new MainUI();
        MainController controller = new MainController(ui);       
-       ui.addListener(controller);       
+       ui.setListener(controller);       
         
         
         
