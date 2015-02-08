@@ -48,7 +48,7 @@ public class MainController implements MainUIListener {
         Date dateFrom = event.getDateFrom();
         Date dateTo = event.getDateTo();
         List<Message> messagesFromRange = model.getMessagesFromRange(dateFrom, dateTo);
-        if (messagesFromRange != null || (!messagesFromRange.isEmpty())) {
+        if (messagesFromRange != null) {
             event.setCurrentMessages(messagesFromRange);
             return true;
         }
@@ -57,12 +57,22 @@ public class MainController implements MainUIListener {
 
     @Override
     public boolean newButtonAction(MainUIEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Message> messagesFromRange = model.getMessagesFromRange(event.getStartRow(), event.getEndRow());
+        if (messagesFromRange != null) {
+            event.setCurrentMessages(messagesFromRange);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean oldButtonAction(MainUIEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Message> messagesFromRange = model.getMessagesFromRange(event.getStartRow(), event.getEndRow());
+        if (messagesFromRange != null) {
+            event.setCurrentMessages(messagesFromRange);
+            return true;
+        }
+        return false;
     }
 
     @Override

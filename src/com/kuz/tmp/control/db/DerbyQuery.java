@@ -155,6 +155,7 @@ public final class DerbyQuery implements Query {
             try {
                 connection.rollback();
             } catch (SQLException ex1) {
+                messages = null;
                 logger.error("Error rolling back", ex1);
             }
         } finally {
