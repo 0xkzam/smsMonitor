@@ -2,6 +2,7 @@
 
 package com.kuz.tmp.control;
 
+import com.kuz.tmp.control.db.Query;
 import com.kuz.tmp.model.Message;
 import com.kuz.tmp.view.MainUI;
 import java.util.List;
@@ -13,10 +14,14 @@ import java.util.List;
  */
 public class MainController implements MainUIListener{
     
+    private MainUI ui;
+    private Query model;
+    
     public MainController(){}
 
-    MainController(MainUI ui) {
-        
+    MainController(MainUI ui , Query model) {
+        this.ui = ui;
+        this.model = model;
     }
    
 

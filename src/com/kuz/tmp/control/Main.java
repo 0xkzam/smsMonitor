@@ -1,15 +1,17 @@
 package com.kuz.tmp.control;
 
+import com.kuz.tmp.control.db.DerbyQuery;
+import com.kuz.tmp.control.db.Query;
 import com.kuz.tmp.view.MainUI;
 import org.apache.log4j.Logger;
 
 /**
- * 
- * 
+ *
+ *
  * @author Kasun Amarasena
  */
 public class Main {
-    
+
     private static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
@@ -43,17 +45,20 @@ public class Main {
         });
 
     }
-    
-    public static void runApp(){
-       
-       MainUI ui = new MainUI();
-       MainController controller = new MainController(ui);       
-       ui.setListener(controller);       
+
+    /**
+     * Instantiate model, view, controller
+     */
+    public static void runApp() {
+
+        MainUI ui = new MainUI();
+        Query model = new DerbyQuery();
+        MainController controller = new MainController(ui, model);
         
-        
-        
-       ui.setVisible(true); 
-    
+        ui.setListener(controller);
+
+        ui.setVisible(true);
+
     }
 
 }
