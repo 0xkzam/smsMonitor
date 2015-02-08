@@ -1,6 +1,7 @@
 package com.kuz.tmp.control;
 
 import com.kuz.tmp.view.MainUI;
+import org.apache.log4j.Logger;
 
 /**
  * 
@@ -8,6 +9,8 @@ import com.kuz.tmp.view.MainUI;
  * @author Kasun Amarasena
  */
 public class Main {
+    
+    private static Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
 
@@ -27,7 +30,7 @@ public class Main {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            logger.fatal("Error running app-Main", ex);
         }
         //</editor-fold>
 
