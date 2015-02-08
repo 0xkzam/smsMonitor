@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Contains all Event info of MainUI
+ * Contains all Event data of MainUI
  *
  * @author Kasun Amarasena
  */

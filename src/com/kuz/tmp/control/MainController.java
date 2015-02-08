@@ -49,9 +49,9 @@ public class MainController implements MainUIListener {
         Date dateTo = event.getDateTo();
         List<Message> messagesFromRange = model.getMessagesFromRange(dateFrom, dateTo);
         if (messagesFromRange != null || (!messagesFromRange.isEmpty())) {
-            event.setCurrentMessages(messagesFromRange);    
+            event.setCurrentMessages(messagesFromRange);
             return true;
-        }        
+        }
         return false;
     }
 
