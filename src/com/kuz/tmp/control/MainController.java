@@ -67,17 +67,12 @@ public class MainController implements MainUIListener {
 
     @Override
     public boolean oldButtonAction(MainUIEvent event) {
-        List<Message> messagesFromRange = model.getMessagesFromRange(event.getStartRow(), event.getEndRow());
-        if (messagesFromRange != null) {
-            event.setCurrentMessages(messagesFromRange);
-            return true;
-        }
-        return false;
+        return newButtonAction(event);
     }
 
     @Override
     public boolean resetAction(MainUIEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return newButtonAction(event);
     }
 
 }
