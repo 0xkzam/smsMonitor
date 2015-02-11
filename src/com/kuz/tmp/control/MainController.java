@@ -1,7 +1,7 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.control.db.Query;
-import com.kuz.tmp.model.Message;
+import com.kuz.tmp.model.db.Model;
+import com.kuz.tmp.model.bean.Message;
 import com.kuz.tmp.view.MainUI;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -15,12 +15,12 @@ import java.util.List;
 public class MainController implements MainUIListener {
 
     private MainUI ui;
-    private Query model;
+    private Model model;
 
     public MainController() {
     }
 
-    MainController(MainUI ui, Query model) {
+    MainController(MainUI ui, Model model) {
         this.ui = ui;
         this.model = model;
     }

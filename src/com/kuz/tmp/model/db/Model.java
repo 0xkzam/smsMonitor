@@ -1,17 +1,17 @@
 
-package com.kuz.tmp.control.db;
+package com.kuz.tmp.model.db;
 
-import com.kuz.tmp.model.Message;
+import com.kuz.tmp.model.bean.Message;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Querying Interface
+ * Modeling Interface
  *
  * @author Kasun Amarasena
  */
-public interface Query {
+public interface Model {
     /**
      * Insert Message object
      * @param message Message 

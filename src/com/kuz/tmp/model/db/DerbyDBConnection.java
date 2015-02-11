@@ -1,5 +1,5 @@
 
-package com.kuz.tmp.control.db;
+package com.kuz.tmp.model.db;
 
 import java.io.FileInputStream;
 import java.io.IOException;

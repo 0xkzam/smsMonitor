@@ -17,6 +17,8 @@
 
 package com.kuz.tmp.control.db;
 
+import com.kuz.tmp.model.db.DerbyDBConnection;
+import com.kuz.tmp.model.db.DBConnection;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;

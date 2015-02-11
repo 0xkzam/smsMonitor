@@ -17,7 +17,9 @@
 
 package com.kuz.tmp.control.db;
 
-import com.kuz.tmp.model.Message;
+import com.kuz.tmp.model.db.DerbyModel;
+import com.kuz.tmp.model.db.Model;
+import com.kuz.tmp.model.bean.Message;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import static org.junit.Assert.*;
  */
 public class DerbyQueryTest {
     
-    private Query instance = new DerbyQuery();
+    private Model instance = new DerbyModel();
     private List<Timestamp> stamps = new ArrayList<>();
     
     public DerbyQueryTest() {
@@ -95,7 +97,7 @@ public class DerbyQueryTest {
         System.out.println("selectFrom  Date Range");
 //        Date startDate = null;
 //        Date endDate = null;
-//        DerbyQuery instance = new DerbyQuery();
+//        DerbyModel instance = new DerbyModel();
 //        List<Message> expResult = null;
 //        List<Message> result = instance.getMessagesFromRange(startDate, endDate);
 //        assertEquals(expResult, result);
@@ -107,7 +109,7 @@ public class DerbyQueryTest {
         System.out.println("selectFrom Row Range");
 //        int startRow = 0;
 //        int endRow = 0;
-//        DerbyQuery instance = new DerbyQuery();
+//        DerbyModel instance = new DerbyModel();
 //        List<Message> expResult = null;
 //        List<Message> result = instance.getMessagesFromRange(startRow, endRow);
        

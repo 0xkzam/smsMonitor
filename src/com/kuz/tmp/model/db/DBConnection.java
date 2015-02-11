@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.kuz.tmp.control.db;
+package com.kuz.tmp.model.db;
 
 import java.sql.Connection;
 

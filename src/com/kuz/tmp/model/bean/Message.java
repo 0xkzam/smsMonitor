@@ -1,5 +1,5 @@
 
-package com.kuz.tmp.model;
+package com.kuz.tmp.model.bean;
 
 import java.sql.Timestamp;
 import java.util.Date;

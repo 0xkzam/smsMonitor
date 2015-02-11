@@ -1,6 +1,6 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.model.Message;
+import com.kuz.tmp.model.bean.Message;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;

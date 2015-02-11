@@ -1,6 +1,6 @@
-package com.kuz.tmp.control.db;
+package com.kuz.tmp.model.db;
 
-import com.kuz.tmp.model.Message;
+import com.kuz.tmp.model.bean.Message;
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.PreparedStatement;
@@ -12,14 +12,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * Querying the Derby database
+ * Modeling the Derby database
  *
  * @author Kasun Amarasena
  */
-public final class DerbyQuery implements Query {
+public final class DerbyModel implements Model {
 
     private final Connection connection = new DerbyDBConnection().getConnection();
-    private final Logger logger = Logger.getLogger(DerbyQuery.class);
+    private final Logger logger = Logger.getLogger(DerbyModel.class);
 
     //PHONENO VARCHAR(12),CONTENTS VARCHR(220), SENT_TIMESTAMP TIMESTAMP, RECEIVED_TIMESTAMP TIMESTAMP
     private final static String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?)";
