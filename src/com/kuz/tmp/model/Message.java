@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Message DAO class
+ * Message Bean class
  * 
  * @author Kasun Amarasena
  */

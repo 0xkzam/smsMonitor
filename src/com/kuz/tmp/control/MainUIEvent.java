@@ -126,7 +126,7 @@ public class MainUIEvent extends Observable {
     /**
      * Specifies ending row number corresponding to the RDBMS table row number
      * sorted by the timestamp in descending order in the current set of
-     * messages of visible on the table
+     * messages of visible on the table.
      *
      * @return end row number
      */
