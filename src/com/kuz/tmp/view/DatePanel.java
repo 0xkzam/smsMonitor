@@ -1,8 +1,5 @@
-
 package com.kuz.tmp.view;
 
-
-import com.kuz.tmp.old.view.*;
 import com.kuz.tmp.old.model.Query;
 import java.sql.SQLException;
 
@@ -13,8 +10,8 @@ import net.sourceforge.jdatepicker.impl.SqlDateModel;
 import org.apache.log4j.Logger;
 
 /**
- * This is a JPanel designed to add external Swing
- * component-JDatePickerImpl to a JFrame form.
+ * This is a JPanel designed to add external Swing component-JDatePickerImpl to
+ * a JFrame form.
  *
  * @author Kasun Amarasena
  */
@@ -23,7 +20,7 @@ public class DatePanel extends JPanel {
     private SqlDateModel dateModel;
     private JDatePanelImpl datePanel;
     private JDatePickerImpl datePicker;
-    private final Logger logger = Logger.getLogger(DatePanel.class);    
+    private final Logger logger = Logger.getLogger(DatePanel.class);
 
     public DatePanel() {
 
