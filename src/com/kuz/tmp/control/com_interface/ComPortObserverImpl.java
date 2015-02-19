@@ -20,6 +20,8 @@ class ComPortObserverImpl extends ComPortObserver {
         if (info.indexOf("ERROR") != -1) {
             logger.error("AT ERROR!");
         }
+        
+        System.out.println(info);
     }
 
 }

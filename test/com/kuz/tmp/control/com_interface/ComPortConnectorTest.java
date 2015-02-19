@@ -47,10 +47,12 @@ public class ComPortConnectorTest {
        
     @Before
     public void setUp() {
+        System.out.println("--------------------------------------------------------");
     }
     
     @After
     public void tearDown() {
+        System.out.println("--------------------------------------------------------");
     }
 
     @Test
@@ -70,12 +72,22 @@ public class ComPortConnectorTest {
     }
     
     @Test
-    public void test2() {
+    public void test2() throws InterruptedException {
         try {
-            ComPort port = connector.connectTo(CommPortIdentifier.getPortIdentifier("COM1"));
+            ComPort port = connector.connectTo("COM5");
+            ComPortObserver ob = new ComPortObserverImpl();
+            port.addObserver(ob);
+            port.send("AT\r\n");
+            port.send("AT+CMGF=1\r\n");
+            port.send("AT+CMGL=\"ALL\"\r\n");
+            Thread.sleep(2000);
+            port.send("AT+CMGL=\"ALL\"\r\n");
+            
         } catch (NoSuchPortException | IOException | PortInUseException | TooManyListenersException ex) {
             fail(ex.getMessage());
         }
     }
+
+    
     
 }

@@ -63,6 +63,23 @@ public final class ComPortConnector {
         }
         return null;
     }
+    
+     /**
+     * Connect to a com port, if a connection already already exists returns the
+     * existing instance
+     *
+     * @param portID CommPortIdentifier
+     * @return ComPort instance associated with the PortID
+     *
+     * @throws NoSuchPortException
+     * @throws IOException
+     * @throws PortInUseException
+     * @throws TooManyListenersException
+     */
+    public ComPort connectTo(String portID) throws NoSuchPortException, IOException, PortInUseException, TooManyListenersException {
+        return connectTo(CommPortIdentifier.getPortIdentifier(portID));
+    }
+    
 
     public void send(CommPortIdentifier portID, String command) throws IOException {
         synchronized (portID) {
