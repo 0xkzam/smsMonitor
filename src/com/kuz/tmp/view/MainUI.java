@@ -8,7 +8,7 @@ import com.kuz.tmp.control.MainUIListener;
  * @author Kasun Amarasena
  */
 public class MainUI extends javax.swing.JFrame {
-    
+
     private MainUIListener mainListener;
     private MainUIEvent mainEvent;
 
@@ -17,14 +17,16 @@ public class MainUI extends javax.swing.JFrame {
      */
     public MainUI() {
         initComponents();
+        localInit();
         this.setLocationRelativeTo(null);
         MessageDialogBox.setParentComponent(MainUI.this);
         datePanel1.setMinDate();
         datePanel2.setCurrentDate();
+        
     }
 
     /**
-     *  
+     *
      * @param listener MainUIListener
      */
     public void setListener(MainUIListener listener) {
@@ -274,4 +276,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 
+    private void localInit() {    
+        
+    }
 }

@@ -1,19 +1,23 @@
 package com.kuz.tmp.model.ui;
 
+import com.kuz.tmp.control.com_interface.MessageObservable;
 import com.kuz.tmp.model.bean.Message;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Custom Table Model Implementation
+ * Custom Table Model Implementation with the capability to Observer Messages
  *
  * @author Kasun Amarasena
  */
-public class TableModel extends AbstractTableModel {
+public class TableModel extends AbstractTableModel implements MessageObservable{
 
     private List<Message> messageList;
     private List<String> columns;
 
+    public TableModel() {        
+    }
+    
     public TableModel(List<Message> messageList) {
         this.messageList.addAll(messageList);
     }
@@ -65,6 +69,17 @@ public class TableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int col) {
         return columns.get(col);
+    }
+    
+    public void addAll(List<Message> listOfMessages){        
+        messageList.addAll(0,listOfMessages);
+        fireTableDataChanged();
+    }
+
+    @Override
+    public void update(List<Message> listOfMessages) {
+        messageList.addAll(0,listOfMessages);
+        fireTableDataChanged();
     }
 
 }

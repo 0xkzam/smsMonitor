@@ -1,27 +1,22 @@
-package com.kuz.tmp.control.com_interface;
 
-import org.apache.log4j.Logger;
+package com.kuz.tmp.control.com_interface;
 
 /**
  *
  * @author Kasun Amarasena
  */
-class ComPortObserverImpl extends ComPortObserver {
 
-    private Logger logger = Logger.getLogger(ComPortObserverImpl.class);
+
+public class ComPortObserverImpl  extends ComPortObserver{
 
     @Override
     public void update(ComPort port, byte[] inputBuffer) {
-        String info = new String(inputBuffer);
+        String simData = new String(inputBuffer);
 
-        if (info.indexOf("OK") != -1) {
-
+        if (simData.indexOf("OK") != -1) {
+            System.out.println(simData);
+        } else if (simData.indexOf("ERROR") != -1) {
+            
         }
-        if (info.indexOf("ERROR") != -1) {
-            logger.error("AT ERROR!");
-        }
-        
-        System.out.println(info);
-    }
-
+    }    
 }
