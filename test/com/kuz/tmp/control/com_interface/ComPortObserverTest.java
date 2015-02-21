@@ -16,7 +16,7 @@
  */
 package com.kuz.tmp.control.com_interface;
 
-import com.kuz.tmp.control.com_interface.ComPortObserverImpl;
+import com.kuz.tmp.control.com_interface.MessageObserver;
 import java.util.Observable;
 import org.junit.Test;
 

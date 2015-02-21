@@ -18,18 +18,12 @@
 package com.kuz.tmp.control.com_interface;
 
 
-import com.kuz.tmp.control.com_interface.ComPort;
-import com.kuz.tmp.control.com_interface.ComPortConnector;
 import java.io.IOException;
 import java.util.List;
 import java.util.TooManyListenersException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.comm.CommPort;
 import javax.comm.CommPortIdentifier;
 import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
-import javax.rmi.CORBA.Util;
 import org.junit.After;
 import static org.junit.Assert.fail;
 import org.junit.Before;

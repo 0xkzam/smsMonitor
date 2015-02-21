@@ -2,7 +2,7 @@
 package com.kuz.tmp.control.com_interface;
 
 import com.kuz.tmp.control.com_interface.ComPort;
-import com.kuz.tmp.control.com_interface.ComPortObserverImpl;
+import com.kuz.tmp.control.com_interface.MessageObserver;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 import javax.comm.CommPortIdentifier;
