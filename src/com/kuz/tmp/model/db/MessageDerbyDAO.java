@@ -12,7 +12,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
- * Modeling the Derby database/Message Data Access Object
+ * Modeling the Derby database-Message Data Access Object
  *
  * @author Kasun Amarasena
  */

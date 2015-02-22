@@ -11,8 +11,9 @@ import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
 
 /**
- * This class acts as the interface between ComPorts and the Client. Uses
- * Flyweight pattern to store ComPort instances and reuse them
+ * This class acts as the interface between native Com ports and the Client.
+ * This is a Singleton and uses Flyweight pattern to store ComPort instances and
+ * reuse them.
  *
  * @author Kasun Amarasena
  */
