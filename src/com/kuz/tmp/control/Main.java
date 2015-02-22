@@ -1,7 +1,7 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.model.db.DerbyModel;
-import com.kuz.tmp.model.db.Model;
+import com.kuz.tmp.model.db.MessageDerbyDAO;
+import com.kuz.tmp.model.db.MessageDAO;
 import com.kuz.tmp.view.MainUI;
 import org.apache.log4j.Logger;
 
@@ -52,7 +52,7 @@ public class Main {
     public static void runApp() {
 
         MainUI ui = new MainUI();
-        Model model = new DerbyModel();
+        MessageDAO model = new MessageDerbyDAO();
         MainController controller = new MainController(ui, model);
         
         ui.setListener(controller);

@@ -1,6 +1,6 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.model.db.Model;
+import com.kuz.tmp.model.db.MessageDAO;
 import com.kuz.tmp.model.bean.Message;
 import com.kuz.tmp.view.MainUI;
 import java.sql.Timestamp;
@@ -15,12 +15,12 @@ import java.util.List;
 public class MainController implements MainUIListener {
 
     private MainUI ui;
-    private Model model;
+    private MessageDAO model;
 
     public MainController() {
     }
 
-    MainController(MainUI ui, Model model) {
+    MainController(MainUI ui, MessageDAO model) {
         this.ui = ui;
         this.model = model;
     }
