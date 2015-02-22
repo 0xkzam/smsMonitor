@@ -16,10 +16,10 @@ import org.apache.log4j.Logger;
  *
  * @author Kasun Amarasena
  */
-public final class DerbyModel implements Model {
+public final class MessageDerbyDAO implements MessageDAO {
 
     private final Connection connection = new DerbyDBConnection().getConnection();
-    private final Logger logger = Logger.getLogger(DerbyModel.class);
+    private final Logger logger = Logger.getLogger(MessageDerbyDAO.class);
 
     //PHONENO VARCHAR(12),CONTENTS VARCHR(220), SENT_TIMESTAMP TIMESTAMP, RECEIVED_TIMESTAMP TIMESTAMP
     private final static String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?)";

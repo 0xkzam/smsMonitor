@@ -6,11 +6,11 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * DB Modeling Interface
+ * DB Modeling Interface/Message DAO
  *
  * @author Kasun Amarasena
  */
-public interface Model {
+public interface MessageDAO {
 
     /**
      * Insert Message object
