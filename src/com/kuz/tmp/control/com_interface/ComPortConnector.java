@@ -1,4 +1,3 @@
-
 package com.kuz.tmp.control.com_interface;
 
 import java.io.IOException;
@@ -12,7 +11,8 @@ import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
 
 /**
- * This class acts as the interface between ComPorts and the Client.
+ * This class acts as the interface between ComPorts and the Client. Uses
+ * Flyweight pattern to store ComPort instances and reuse them
  *
  * @author Kasun Amarasena
  */
@@ -21,12 +21,14 @@ public final class ComPortConnector {
     //Map of connected ports
     private HashMap<String, ComPort> ports = new HashMap<>();
 
-    private ComPortConnector() {}
+    private ComPortConnector() {
+    }
 
     /**
      * ComPortConnector Singleton holder
      */
     private static class ComPortConnectorHolder {
+
         private static final ComPortConnector connector = new ComPortConnector();
     }
 
@@ -63,8 +65,8 @@ public final class ComPortConnector {
         }
         return null;
     }
-    
-     /**
+
+    /**
      * Connect to a com port, if a connection already already exists returns the
      * existing instance
      *
@@ -79,14 +81,13 @@ public final class ComPortConnector {
     public ComPort connectTo(String portID) throws NoSuchPortException, IOException, PortInUseException, TooManyListenersException {
         return connectTo(CommPortIdentifier.getPortIdentifier(portID));
     }
-    
 
     public void send(CommPortIdentifier portID, String command) throws IOException {
         synchronized (portID) {
             this.ports.get(portID.getName()).send(command);
         }
     }
-    
+
     /**
      * @return List<String> of available COM port identifiers as Strings
      */
