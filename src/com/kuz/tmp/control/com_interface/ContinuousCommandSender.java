@@ -17,6 +17,7 @@ public abstract class ContinuousCommandSender extends Thread {
     private byte[] commandByte;
     private int commandInt;
     private long interval = DEFAULT_INTERVAL;
+    private volatile boolean continueOn = true;
 
     public ContinuousCommandSender() {
     }
@@ -77,6 +78,14 @@ public abstract class ContinuousCommandSender extends Thread {
 
     public void setCommand(int commandInt) {
         this.commandInt = commandInt;
+    }
+
+    public boolean isContinueOn() {
+        return continueOn;
+    }
+
+    public void setContinueOn(boolean continueOn) {
+        this.continueOn = continueOn;
     }
 
 }
