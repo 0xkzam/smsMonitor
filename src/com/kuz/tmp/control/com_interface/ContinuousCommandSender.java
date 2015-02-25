@@ -84,6 +84,12 @@ public abstract class ContinuousCommandSender extends Thread {
         return continueOn;
     }
 
+    /**
+     * Used to stop this thread
+     *
+     * @param continueOn Set false if the thread needs to be stopped, useless of
+     * setting true
+     */
     public void setContinueOn(boolean continueOn) {
         this.continueOn = continueOn;
     }
