@@ -2,7 +2,6 @@ package com.kuz.tmp.model.db;
 
 import com.kuz.tmp.model.bean.Message;
 import java.util.Date;
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -24,25 +23,25 @@ public interface MessageDAO {
      * Insert a List of Message objects
      *
      * @param messages List<Message>
-     * @return int array - refer to <code>java.sql.Statement.executeBatch</code>
+     * @return true if successful, false otherwise
      */
-    int[] insert(List<Message> messages);
+    boolean insert(List<Message> messages);
 
     /**
      * Delete message from the database
      *
-     * @param stamp Timestamp
+     * @param date
      * @return true if successful, false otherwise
      */
-    boolean delete(Timestamp stamp);
+    boolean delete(Date date);
 
     /**
      * Delete list of messages from the database
      *
-     * @param stamps List<Timestamp>
-     * @return int array - refer to <code>java.sql.Statement.executeBatch</code>
+     * @param listOfDates List<Date>
+     * @return true if successful, false otherwise
      */
-    int[] delete(List<Timestamp> stamps);
+    boolean delete(List<Date> listOfDates);
 
     /**
      *
