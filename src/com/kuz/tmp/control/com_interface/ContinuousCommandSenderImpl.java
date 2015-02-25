@@ -57,7 +57,7 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
                 }
             }
 
-            while (true) {
+            while (isContinueOn()) {
                 try {
                     port.send(this.getCommandString());
                 } catch (IOException ex) {
