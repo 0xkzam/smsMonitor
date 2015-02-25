@@ -17,9 +17,10 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
     }
 
     /**
-     * 
-     * @param port
-     * @param continuousCommand 
+     *
+     * @param port ComPort
+     * @param continuousCommand This is executed continuously after each time
+     * interval
      */
     public ContinuousCommandSenderImpl(ComPort port, String continuousCommand) {
         super(port, continuousCommand);
@@ -27,9 +28,11 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
 
     /**
      *
-     * @param port Command
-     * @param continuousCommand This is executed continuously after each time interval
-     * @param preCommands List of commands, executed prior to the continuous command 
+     * @param port ComPort
+     * @param continuousCommand This is executed continuously after each time
+     * interval
+     * @param preCommands List of commands, executed prior to the continuous
+     * command
      */
     public ContinuousCommandSenderImpl(ComPort port, String continuousCommand, List<String> preCommands) {
         super(port, continuousCommand);
