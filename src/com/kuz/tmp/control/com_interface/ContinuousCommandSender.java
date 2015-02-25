@@ -1,5 +1,7 @@
 package com.kuz.tmp.control.com_interface;
 
+import java.util.List;
+
 /**
  * Thread sending the AT commands continuously to a specified COM port in a
  * specified time period. Command can be in the form of a String, byte array or
@@ -17,6 +19,7 @@ public abstract class ContinuousCommandSender extends Thread {
     private byte[] commandByte;
     private int commandInt;
     private long interval = DEFAULT_INTERVAL;
+    private List<String> preCommands;
     private volatile boolean continueOn = true;
 
     public ContinuousCommandSender() {
@@ -92,6 +95,14 @@ public abstract class ContinuousCommandSender extends Thread {
      */
     public void setContinueOn(boolean continueOn) {
         this.continueOn = continueOn;
+    }
+    
+    public List<String> getPreCommands() {
+        return preCommands;
+    }
+
+    public void setPreCommands(List<String> preCommands) {
+        this.preCommands = preCommands;
     }
 
 }
