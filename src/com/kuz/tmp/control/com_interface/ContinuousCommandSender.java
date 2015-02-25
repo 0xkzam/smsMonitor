@@ -1,15 +1,15 @@
 package com.kuz.tmp.control.com_interface;
 
 /**
- * Thread sending the AT commands concurrently to a specified COM port. Command
- * can be in the form of a String, byte array or integer. This is thread-safe by
- * default since <code>send()</code> method in ComPort class in synchronized. If
- * the interval between 2 commands are not specified, a default value of 1000
- * milliseconds will be used.
+ * Thread sending the AT commands continuously to a specified COM port in a
+ * specified time period. Command can be in the form of a String, byte array or
+ * integer. This is thread-safe by default since <code>send()</code> method in
+ * ComPort class in synchronized. If the interval between 2 commands are not
+ * specified, a default value of 1000 milliseconds will be used.
  *
  * @author Kasun Amarasena
  */
-public abstract class ConcurrentCommandSender extends Thread {
+public abstract class ContinuousCommandSender extends Thread {
 
     public static final long DEFAULT_INTERVAL = 1000L;
     private ComPort port;
@@ -18,20 +18,20 @@ public abstract class ConcurrentCommandSender extends Thread {
     private int commandInt;
     private long interval = DEFAULT_INTERVAL;
 
-    public ConcurrentCommandSender() {
+    public ContinuousCommandSender() {
     }
 
-    public ConcurrentCommandSender(ComPort port, String commandString) {
+    public ContinuousCommandSender(ComPort port, String commandString) {
         this.port = port;
         this.commandString = commandString;
     }
 
-    public ConcurrentCommandSender(ComPort port, byte[] commandByte) {
+    public ContinuousCommandSender(ComPort port, byte[] commandByte) {
         this.port = port;
         this.commandByte = commandByte;
     }
 
-    public ConcurrentCommandSender(ComPort port, int commandInt) {
+    public ContinuousCommandSender(ComPort port, int commandInt) {
         this.port = port;
         this.commandInt = commandInt;
     }
