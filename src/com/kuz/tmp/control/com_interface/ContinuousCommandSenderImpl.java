@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
 
-    private List<String> preCommands;
+    
 
     public ContinuousCommandSenderImpl() {
     }
@@ -36,14 +36,15 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
      */
     public ContinuousCommandSenderImpl(ComPort port, String continuousCommand, List<String> preCommands) {
         super(port, continuousCommand);
-        this.preCommands.addAll(preCommands);
+        this.setPreCommands(preCommands);
     }
 
     @Override
     public void run() {
         ComPort port = this.getPort();
         if (port != null) {
-
+            
+            List<String> preCommands = getPreCommands();
             if (preCommands != null || !preCommands.isEmpty()) {
                 for (String preCommand : preCommands) {
                     try {
@@ -69,14 +70,5 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
                 }
             }
         }
-    }
-
-    public List<String> getPreCommands() {
-        return preCommands;
-    }
-
-    public void setPreCommands(List<String> preCommands) {
-        this.preCommands = preCommands;
-    }
-
+    }    
 }
