@@ -21,8 +21,8 @@ public class Message {
     /**
      * @param number Phone number as a String
      * @param contents Message contents
-     * @param sentDate Message sent Date
-     * @param receivedDate Message received Date
+     * @param sentDate Message sent Date according to SIM data
+     * @param receivedDate Message received Date by the System
      */
     public Message(String number, String contents, Date sentDate, Date receivedDate) {
         this.number = number;
@@ -80,11 +80,18 @@ public class Message {
             return false;
         }
         final Message other = (Message) obj;
+        if (!Objects.equals(this.number, other.number)) {
+            return false;
+        }
         if (!Objects.equals(this.sentDate, other.sentDate)) {
             return false;
         }
-        return Objects.equals(this.receivedDate, other.receivedDate);
+        if (!Objects.equals(this.receivedDate, other.receivedDate)) {
+            return false;
+        }
+        return true;
     }
+    
 
     @Override
     public String toString() {
