@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TooManyListenersException;
 import javax.comm.CommPortIdentifier;
 import javax.comm.NoSuchPortException;
@@ -23,6 +24,14 @@ public final class ComPortConnector {
     private HashMap<String, ComPort> ports = new HashMap<>();
 
     private ComPortConnector() {
+    }
+
+    /**
+     * 
+     * @return Set<String> of all port names, currently in use by this app 
+     */
+    public Set<String> getPorts() {
+        return ports.keySet();
     }
 
     /**
@@ -96,7 +105,7 @@ public final class ComPortConnector {
 
         Enumeration portList = CommPortIdentifier.getPortIdentifiers();
         CommPortIdentifier portId;
-        List<String> ls = new ArrayList<>(4);
+        List<String> ls = new ArrayList<>(5);
 
         while (portList.hasMoreElements()) {
             portId = (CommPortIdentifier) portList.nextElement();
