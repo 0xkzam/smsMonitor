@@ -130,15 +130,15 @@ public class MainController implements Controller {
         for (String portName : availablePorts) {
             ComPort port = null;
             try {
-                port = portConnector.connectTo(portName);
+                port = portConnector.connectTo(portName);                
                 statusList.add(new ComPortStatus(portName, NOT_IN_USE));
             } catch (PortInUseException ex) {
                 statusList.add(new ComPortStatus(portName, IN_USE_OTHER));
             } catch (IOException | NoSuchPortException | TooManyListenersException ex) {
                 statusList.add(new ComPortStatus(portName, CONNECTION_ERROR));
             } finally {
-                if (port != null) {
-                    port.close();
+                if (port != null) {                    
+                    port.close();                    
                 }
             }
         }

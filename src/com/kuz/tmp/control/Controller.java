@@ -10,6 +10,9 @@ public interface Controller {
     String AT_READ_ALL = "AT+CMGL=\"ALL\"\r\n";
     String AT_READ_UNREAD = "AT+CMGL=\"REC UNREAD\"\r\n";
     String AT_AVAILABLE_COMMANDS = "AT+CLAC\r\n";
+    String AT_SERVICE_CENTER = "AT+CSCA?\r\n";
+    String AT_MANUFACTURER = "AT+CGMI\r\n";
+    String AT_DEVICE_MODEL = "AT+CGMM\r\n";
 
     //Status
     String IN_USE = "In use";
