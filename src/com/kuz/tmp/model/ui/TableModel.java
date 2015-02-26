@@ -1,7 +1,7 @@
 package com.kuz.tmp.model.ui;
 
-import com.kuz.tmp.control.com_interface.MessageObservable;
 import com.kuz.tmp.model.bean.Message;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -10,12 +10,16 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Kasun Amarasena
  */
-public class TableModel extends AbstractTableModel implements MessageObservable{
+public class TableModel extends AbstractTableModel{
 
-    private List<Message> messageList;
-    private List<String> columns;
+    private List<Message> messageList = new ArrayList<>(5);
+    private List<String> columns  = new ArrayList<>(4);
 
-    public TableModel() {        
+    public TableModel() {    
+        columns.add("Sender");
+        columns.add("Contents");
+        columns.add("Sent date & time");
+        columns.add("Received date & time");        
     }
     
     public TableModel(List<Message> messageList) {
@@ -39,14 +43,14 @@ public class TableModel extends AbstractTableModel implements MessageObservable{
         }
         Message message = messageList.get(rowIndex);
         switch (columnIndex) {
-            case 1:
+            case 0:
                 return message.getNumber();
-            case 2:
+            case 1:
                 return message.getContents();
+            case 2:
+                return message.getSentDate();
             case 3:
-                return message.getSentDate();
-            case 4:
-                return message.getSentDate();
+                return message.getReceivedDate();
             default:
                 return null;
         }
@@ -74,12 +78,6 @@ public class TableModel extends AbstractTableModel implements MessageObservable{
     public void addAll(List<Message> listOfMessages){        
         messageList.addAll(0,listOfMessages);
         fireTableDataChanged();
-    }
-
-    @Override
-    public void update(List<Message> listOfMessages) {
-        messageList.addAll(0,listOfMessages);
-        fireTableDataChanged();
-    }
+    }  
 
 }
