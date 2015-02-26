@@ -5,7 +5,11 @@ import com.kuz.tmp.control.com_interface.ComPortStatus;
 import com.kuz.tmp.model.bean.Message;
 import com.kuz.tmp.model.ui.MessageTableModel;
 import com.kuz.tmp.model.ui.StatusTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.TableColumn;
 
 /**
@@ -32,8 +36,8 @@ public class MainUI extends javax.swing.JFrame {
     public void addMessages(List<Message> listOfMessages) {
         messageTableModel.addAll(listOfMessages);
     }
-    
-    public void updateStatus(List<ComPortStatus> statusList){
+
+    public void updateStatus(List<ComPortStatus> statusList) {
         statusTableModel.addAll(statusList);
     }
 
@@ -63,6 +67,7 @@ public class MainUI extends javax.swing.JFrame {
         jTextArea = new javax.swing.JTextArea();
         deleteButton = new javax.swing.JButton();
         olderButton = new javax.swing.JButton();
+        jButtonRefresh = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         connectMenuItem = new javax.swing.JMenuItem();
@@ -246,6 +251,13 @@ public class MainUI extends javax.swing.JFrame {
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
+        jButtonRefresh.setText("Refresh");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshActionPerformed(evt);
+            }
+        });
+
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
 
@@ -286,7 +298,9 @@ public class MainUI extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(91, 91, 91)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonRefresh)
+                        .addGap(20, 20, 20)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -297,12 +311,17 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonRefresh)
+                        .addGap(19, 19, 19)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -321,6 +340,12 @@ public class MainUI extends javax.swing.JFrame {
         String portName = statusTableModel.getValueAt(selectedRow, 0);
     }//GEN-LAST:event_jTableStatusMouseClicked
 
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
+        if (controller != null) {
+            controller.updateStatus();
+        }
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
@@ -334,6 +359,7 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JButton filterButton;
     private javax.swing.JMenu helpMenu;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -350,6 +376,10 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JButton resetButton;
     // End of variables declaration//GEN-END:variables
 
+    private JPopupMenu popupMenu;
+    private JMenuItem connectStatusMenuItem;
+    private JMenuItem disconnectStatusMenuItem;
+
     private MessageTableModel messageTableModel = new MessageTableModel();
     private StatusTableModel statusTableModel = new StatusTableModel();
     private Controller controller;
@@ -358,31 +388,66 @@ public class MainUI extends javax.swing.JFrame {
     private void localInit() {
         jTableMessage.setModel(messageTableModel);
         int width = jTableMessage.getWidth();
-        TableColumn column1 = jTableMessage.getColumnModel().getColumn(0);       
+        TableColumn column1 = jTableMessage.getColumnModel().getColumn(0);
         TableColumn column2 = jTableMessage.getColumnModel().getColumn(1);
         TableColumn column3 = jTableMessage.getColumnModel().getColumn(2);
         TableColumn column4 = jTableMessage.getColumnModel().getColumn(3);
-        
-        column1.setMaxWidth((int)(width*(0.20)));
-        column2.setMaxWidth((int)(width*(0.46)));
-        column3.setMaxWidth((int)(width*(0.18)));
-        column4.setMaxWidth((int)(width*(0.18)));
-        
+
+        column1.setMaxWidth((int) (width * (0.20)));
+        column2.setMaxWidth((int) (width * (0.46)));
+        column3.setMaxWidth((int) (width * (0.18)));
+        column4.setMaxWidth((int) (width * (0.18)));
+
         jTableStatus.setModel(statusTableModel);
         width = jTableStatus.getWidth();
-        column1 = jTableStatus.getColumnModel().getColumn(0);       
-        column2 = jTableStatus.getColumnModel().getColumn(1);        
-        
-        column1.setMaxWidth((int)(width*(0.30)));
-        column2.setMaxWidth((int)(width*(0.70)));       
-        
-        
+        column1 = jTableStatus.getColumnModel().getColumn(0);
+        column2 = jTableStatus.getColumnModel().getColumn(1);
+
+        column1.setMaxWidth((int) (width * (0.30)));
+        column2.setMaxWidth((int) (width * (0.70)));
+
+        popupMenu = new JPopupMenu();
+        connectStatusMenuItem = new JMenuItem("Connect");
+        disconnectStatusMenuItem = new JMenuItem("Disconnect");
+
+        connectStatusMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = jTableStatus.getSelectedRow();
+                String portName = statusTableModel.getValueAt(selectedRow, 0);
+                if (controller != null) {
+                    boolean success = controller.connectTo(portName);
+                    if (success) {
+                        controller.updateStatus();
+                    }
+                }
+
+            }
+        });
+
+        disconnectStatusMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = jTableStatus.getSelectedRow();
+                String portName = statusTableModel.getValueAt(selectedRow, 0);
+                if (controller != null) {
+                    controller.disconnect(portName);
+                    controller.updateStatus();
+                }
+            }
+        });
+
+        popupMenu.add(connectStatusMenuItem);
+        popupMenu.add(disconnectStatusMenuItem);
+        jTableStatus.setComponentPopupMenu(popupMenu);
     }
 
     public void test() {
         if (controller != null) {
+//            controller.updateStatus();
             boolean success = controller.connectTo("COM4");
             controller.updateStatus();
+            
         }
     }
 
