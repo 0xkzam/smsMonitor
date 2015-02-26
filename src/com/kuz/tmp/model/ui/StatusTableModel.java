@@ -3,6 +3,7 @@ package com.kuz.tmp.model.ui;
 
 import com.kuz.tmp.control.com_interface.ComPortStatus;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -22,8 +23,7 @@ public class StatusTableModel extends AbstractTableModel {
 
     public StatusTableModel() {    
         columns.add("Serial Port");
-        columns.add("Status");
-            
+        columns.add("Status");            
     }    
 
     @Override
@@ -64,6 +64,7 @@ public class StatusTableModel extends AbstractTableModel {
     
     public void addAll(List<ComPortStatus> statusList){      
         this.statusList.clear();
+        Collections.sort(statusList);
         this.statusList.addAll(statusList);
         fireTableDataChanged();
     } 
