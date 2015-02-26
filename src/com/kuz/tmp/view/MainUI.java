@@ -2,6 +2,10 @@ package com.kuz.tmp.view;
 
 import com.kuz.tmp.control.MainUIEvent;
 import com.kuz.tmp.control.MainUIListener;
+import com.kuz.tmp.control.com_interface.MessageObserver;
+import com.kuz.tmp.model.bean.Message;
+import com.kuz.tmp.model.ui.TableModel;
+import java.util.List;
 
 /**
  *
@@ -20,9 +24,21 @@ public class MainUI extends javax.swing.JFrame {
         localInit();
         this.setLocationRelativeTo(null);
         MessageDialogBox.setParentComponent(MainUI.this);
-        datePanel1.setMinDate();
-        datePanel2.setCurrentDate();
-        
+        //datePanel1.setMinDate();
+        // datePanel2.setCurrentDate();
+
+    }
+
+    /**
+     * Implementing the MessageObserver for this UI class. The incoming Messages
+     * are added to the table model
+     */
+    public class MyMessageObserver extends MessageObserver {
+
+        @Override
+        public void update(List<Message> listOfMessages) {
+            tableModel.addAll(listOfMessages);
+        }
     }
 
     /**
@@ -79,7 +95,7 @@ public class MainUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                " From", " Message", "Date Sent", "Received Time stamp"
+                " From", " Message", "Date & Time (SIM)", "Received Date & Time (System)"
             }
         ) {
             Class[] types = new Class [] {
@@ -103,12 +119,12 @@ public class MainUI extends javax.swing.JFrame {
             jTable.getColumnModel().getColumn(0).setMinWidth(120);
             jTable.getColumnModel().getColumn(0).setPreferredWidth(120);
             jTable.getColumnModel().getColumn(0).setMaxWidth(150);
-            jTable.getColumnModel().getColumn(2).setMinWidth(90);
-            jTable.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jTable.getColumnModel().getColumn(2).setMaxWidth(90);
-            jTable.getColumnModel().getColumn(3).setMinWidth(95);
-            jTable.getColumnModel().getColumn(3).setPreferredWidth(95);
-            jTable.getColumnModel().getColumn(3).setMaxWidth(95);
+            jTable.getColumnModel().getColumn(2).setMinWidth(170);
+            jTable.getColumnModel().getColumn(2).setPreferredWidth(170);
+            jTable.getColumnModel().getColumn(2).setMaxWidth(170);
+            jTable.getColumnModel().getColumn(3).setMinWidth(170);
+            jTable.getColumnModel().getColumn(3).setPreferredWidth(170);
+            jTable.getColumnModel().getColumn(3).setMaxWidth(170);
         }
 
         jTextArea.setEditable(false);
@@ -209,7 +225,7 @@ public class MainUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -219,21 +235,22 @@ public class MainUI extends javax.swing.JFrame {
                                 .addComponent(newerButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(olderButton))))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(statusLabel)
-                        .addGap(8, 8, 8)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 139, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(statusLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addComponent(statusLabel)
-                .addGap(1, 1, 1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(1, 1, 1)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,7 +293,9 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 
-    private void localInit() {    
-        
+    private TableModel tableModel = new TableModel();
+
+    private void localInit() {
+        jTable.setModel(tableModel);
     }
 }
