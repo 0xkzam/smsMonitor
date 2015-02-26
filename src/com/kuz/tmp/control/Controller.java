@@ -11,6 +11,12 @@ public interface Controller {
     String AT_READ_UNREAD = "AT+CMGL=\"REC UNREAD\"\r\n";
     String AT_AVAILABLE_COMMANDS = "AT+CLAC\r\n";
 
+    //Status
+    String IN_USE = "In use";
+    String IN_USE_OTHER = "In use by third party";
+    String NOT_IN_USE = "Not in use";
+    String CONNECTION_ERROR = "Unable to check";
+
     /**
      * This method is used to connect to a specified ComPort and start
      * ConcurrentCommandSender to send commands continously to the SIM card to
@@ -34,5 +40,10 @@ public interface Controller {
      * @return All the OS registered Com ports
      */
     List<String> getAvailableComPorts();
+
+    /**
+     * Push status of all com ports to the UI
+     */
+    void updateStatus();
 
 }
