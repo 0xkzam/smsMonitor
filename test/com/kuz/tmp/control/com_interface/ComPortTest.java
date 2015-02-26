@@ -5,11 +5,7 @@ import java.util.TooManyListenersException;
 import javax.comm.CommPortIdentifier;
 import javax.comm.NoSuchPortException;
 import javax.comm.PortInUseException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 /**
  *
@@ -20,22 +16,18 @@ public class ComPortTest {
     private static ComPort comport;
     private static ComPortObserverImpl obs;
 
-    public ComPortTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
+    private static synchronized void setUpClass() {
         try {
             comport = new ComPort(CommPortIdentifier.getPortIdentifier("COM4"));
+            comport.send("AT\r\n");
         } catch (NoSuchPortException | PortInUseException | IOException | TooManyListenersException ex) {
-            assertFalse("Specified port may not be available:" + ex, true);
+            assertFalse("Specified port may not be available:" + ex.toString(), true);
         }
         obs = new ComPortObserverImpl();
         comport.addObserver(obs);
     }
 
-    @AfterClass
-    public static void tearDownClass() {
+    public static synchronized void tearDownClass() {
         comport.close();
         try {
             comport.send("AT\r\n");
@@ -44,35 +36,50 @@ public class ComPortTest {
         }
     }
 
-    @Before
-    public void before() {
-        System.out.println("---------------------------------------------------------------------------------------------");
+    public static synchronized void test1() throws InterruptedException, IOException {
+        comport.send("AT+CGMI\r\n"); //Get the name of manufacturer
     }
 
-    /**
-     * Test of send method, of class ComPort.
-     * @throws java.lang.InterruptedException
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testSend_String() throws InterruptedException, IOException {
-        System.out.println("send");       
-        
-        comport.send("AT\r\n");
-        Thread.sleep(1000L);
-        comport.send("AT+CRSM\r\n");
-        Thread.sleep(2000L);
-        comport.send("AT+CSIM\r\n");
-        Thread.sleep(2000L);
-        comport.send("AT+CMGF=1\r\n");
-        Thread.sleep(2000L);
-        comport.send("AT+CMGL=\"ALL\"\r\n");
-
+    public static synchronized void test2() throws InterruptedException, IOException {
+        comport.send("AT+GMI\r\n");//Get the ID of manufacturer
     }
 
-    /**
-     * Test of send method, of class ComPort.
-     */
+    public static synchronized void test3() throws InterruptedException, IOException {
+        comport.send("AT+GMM\r\n");//Get the Model information 
+    }
+
+    public static synchronized void test4() throws InterruptedException, IOException {;
+        comport.send("AT+CGSN\r\n");//Get IMEI number (International Mobile Equipment Identity)
+    }
+
+    public static synchronized void test5() throws InterruptedException, IOException {
+        comport.send("AT+CPAS\r\n"); //No result
+    }
+
+    public static synchronized void test6() throws InterruptedException, IOException {
+        comport.send("AT+CREG\r\n");//No result
+    }
+
+    public static synchronized void test7() throws InterruptedException, IOException {
+        comport.send("AT+COPS?\r\n"); //
+    }
+
+    public static synchronized void test8() throws InterruptedException, IOException {
+        comport.send("AT+CSPN?\r\n");//service provider name from the SIM - NO result
+    }
+    
+    public static synchronized void test9() throws InterruptedException, IOException {
+        comport.send("AT+CNUM=?\r\n");//NO result
+    }
+
+    public static synchronized void test10() throws InterruptedException, IOException {
+        comport.send("AT+CIMI\r\n");//Get IMSI number (International Mobile Subscriber Identity)
+    }
+    
+    public static synchronized void test11() throws InterruptedException, IOException {
+        comport.send("AT+CGMM\r\n");//Get the Model information 
+    }
+    
 //    @Test
 //    public void testSend_byteArr() {
 //        System.out.println("send");
@@ -85,15 +92,31 @@ public class ComPortTest {
 //        }
 //       
 //    }   
-    /**
-     * Test of setBufferSize method, of class ComPort.
-     */
-    @Test
-    public void testSetBufferSize() {
-        System.out.println("setBufferSize");
-        int bufferSize = 500;
-        comport.setBufferSize(bufferSize);
-        assertTrue(bufferSize == comport.getBufferSize());
-    }
+//    /**
+//     * Test of setBufferSize method, of class ComPort.
+//     */
+//    @Test
+//    public void testSetBufferSize() {
+//        System.out.println("setBufferSize");
+//        int bufferSize = 500;
+//        comport.setBufferSize(bufferSize);
+//        assertTrue(bufferSize == comport.getBufferSize());
+//    }
+    public static void main(String[] args) throws InterruptedException, IOException {
+        setUpClass();
+//        test1();
+//        test2();
+//        test3();
+//        test4();
+//        test5();
+//        test6();
+//        test7();
+//        test8();
+//        test9();
+//        test10();
+        test3();
 
+        Thread.sleep(3000L);
+        tearDownClass();
+    }
 }
