@@ -90,13 +90,14 @@ public abstract class ContinuousCommandSender extends Thread {
     /**
      * Used to stop this thread
      *
-     * @param continueOn Set false if the thread needs to be stopped, useless of
-     * setting true
+     * @param continueOn Set false if the thread needs to be stopped, setting
+     * true can be used on an already instantiated but stopped Sender, usually a
+     * cached one, otherwise setting true on a new sender is useless.
      */
     public void setContinueOn(boolean continueOn) {
         this.continueOn = continueOn;
     }
-    
+
     public List<String> getPreCommands() {
         return preCommands;
     }
