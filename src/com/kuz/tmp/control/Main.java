@@ -1,6 +1,5 @@
 package com.kuz.tmp.control;
 
-import com.kuz.tmp.model.db.MessageDerbyDAO;
 import com.kuz.tmp.model.db.MessageDAO;
 import com.kuz.tmp.view.MainUI;
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ public class Main {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
 
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     //javax.swing.UIManager.setLookAndFeel();
@@ -47,17 +46,19 @@ public class Main {
     }
 
     /**
-     * Instantiate model, view, controller
+     * Instantiate model, view, controller and start the application
      */
     public static void runApp() {
 
-        MainUI ui = new MainUI();
-        MessageDAO model = new MessageDerbyDAO();
-        MainController controller = new MainController(ui, model);
-        
-        ui.setListener(controller);
+        MainUI view = new MainUI();
+        MessageDAO model = null;
+//       model = new DerbyMessageDAO();
 
-        ui.setVisible(true);
+        Controller controller = new MainController(view, model);
+        view.setController(controller);
+        view.setVisible(true);
+
+        view.test();
 
     }
 
