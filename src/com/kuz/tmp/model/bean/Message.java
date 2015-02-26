@@ -12,7 +12,7 @@ public class Message implements Comparable<Message> {
 
     private String number;
     private String contents;
-    private Date sentDate; //Data included in the message details(in sim data)
+    private Date sentDate; //Date included in the message details(in sim data)
     private Date receivedDate;
 
     public Message() {
