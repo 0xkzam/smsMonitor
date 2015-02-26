@@ -99,8 +99,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
                     port.close();
                 }
                 setChanged();
-                notifyObservers(this.readBuffer);
-                
+                notifyObservers(this.readBuffer);                
                 
                 break;
         }
