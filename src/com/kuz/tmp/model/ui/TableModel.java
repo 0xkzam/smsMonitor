@@ -1,6 +1,8 @@
 package com.kuz.tmp.model.ui;
 
 import com.kuz.tmp.model.bean.Message;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -14,6 +16,7 @@ public class TableModel extends AbstractTableModel{
 
     private List<Message> messageList = new ArrayList<>(5);
     private List<String> columns  = new ArrayList<>(4);
+    private DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss yy/MM/dd");
 
     public TableModel() {    
         columns.add("Sender");
@@ -48,9 +51,9 @@ public class TableModel extends AbstractTableModel{
             case 1:
                 return message.getContents();
             case 2:
-                return message.getSentDate();
+                return dateFormat.format(message.getSentDate());
             case 3:
-                return message.getReceivedDate();
+                return dateFormat.format(message.getReceivedDate());
             default:
                 return null;
         }
