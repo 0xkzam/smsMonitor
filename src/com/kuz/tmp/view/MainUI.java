@@ -1,41 +1,40 @@
 package com.kuz.tmp.view;
 
-import com.kuz.tmp.control.com_interface.MessageObserver;
+import com.kuz.tmp.control.Controller;
+import com.kuz.tmp.control.com_interface.ComPortStatus;
 import com.kuz.tmp.model.bean.Message;
-import com.kuz.tmp.model.ui.TableModel;
-import java.util.Collections;
+import com.kuz.tmp.model.ui.MessageTableModel;
+import com.kuz.tmp.model.ui.StatusTableModel;
 import java.util.List;
+import javax.swing.table.TableColumn;
 
 /**
+ *
+ * Main User Interface of the SMS monitor application
  *
  * @author Kasun Amarasena
  */
 public class MainUI extends javax.swing.JFrame {
 
-    /**
-     * Creates Main UI of the SMS monitor application
-     */
     public MainUI() {
         initComponents();
         localInit();
         this.setLocationRelativeTo(null);
-        MessageDialogBox.setParentComponent(MainUI.this);
+
         //datePanel1.setMinDate();
         // datePanel2.setCurrentDate();
-
     }
 
-    /**
-     * Implementing the MessageObserver for this UI class. The incoming
-     * Messages, sorted by sent date are added to the table model
-     */
-    public class MyMessageObserver extends MessageObserver {
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
 
-        @Override
-        public void update(List<Message> listOfMessages) {
-            Collections.sort(listOfMessages);
-            tableModel.addAll(listOfMessages);
-        }
+    public void addMessages(List<Message> listOfMessages) {
+        messageTableModel.addAll(listOfMessages);
+    }
+    
+    public void updateStatus(List<ComPortStatus> statusList){
+        statusTableModel.addAll(statusList);
     }
 
     /**
@@ -48,19 +47,22 @@ public class MainUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea = new javax.swing.JTextArea();
+        jTableMessage = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         filterButton = new javax.swing.JButton();
         resetButton = new javax.swing.JButton();
         datePanel1 = new com.kuz.tmp.view.DatePanel();
         datePanel2 = new com.kuz.tmp.view.DatePanel();
-        statusLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableStatus = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        newerButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea = new javax.swing.JTextArea();
         deleteButton = new javax.swing.JButton();
         olderButton = new javax.swing.JButton();
-        newerButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         connectMenuItem = new javax.swing.JMenuItem();
@@ -71,7 +73,7 @@ public class MainUI extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SMS Monitor 1.0v");
+        setTitle("SMS Monitor 2.0v");
         setBackground(new java.awt.Color(153, 204, 255));
         setMinimumSize(new java.awt.Dimension(748, 560));
         setResizable(false);
@@ -79,7 +81,7 @@ public class MainUI extends javax.swing.JFrame {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 255, 255), null));
         jScrollPane1.setMinimumSize(new java.awt.Dimension(450, 410));
 
-        jTable.setModel(new javax.swing.table.DefaultTableModel(
+        jTableMessage.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -102,24 +104,26 @@ public class MainUI extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable.setMinimumSize(new java.awt.Dimension(610, 200));
-        jScrollPane1.setViewportView(jTable);
-        if (jTable.getColumnModel().getColumnCount() > 0) {
-            jTable.getColumnModel().getColumn(0).setMinWidth(120);
-            jTable.getColumnModel().getColumn(0).setPreferredWidth(120);
-            jTable.getColumnModel().getColumn(0).setMaxWidth(150);
-            jTable.getColumnModel().getColumn(2).setMinWidth(170);
-            jTable.getColumnModel().getColumn(2).setPreferredWidth(170);
-            jTable.getColumnModel().getColumn(2).setMaxWidth(170);
-            jTable.getColumnModel().getColumn(3).setMinWidth(170);
-            jTable.getColumnModel().getColumn(3).setPreferredWidth(170);
-            jTable.getColumnModel().getColumn(3).setMaxWidth(170);
+        jTableMessage.setGridColor(new java.awt.Color(204, 204, 255));
+        jTableMessage.setMinimumSize(new java.awt.Dimension(610, 200));
+        jTableMessage.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableMessage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableMessageMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableMessage);
+        if (jTableMessage.getColumnModel().getColumnCount() > 0) {
+            jTableMessage.getColumnModel().getColumn(0).setMinWidth(120);
+            jTableMessage.getColumnModel().getColumn(0).setPreferredWidth(120);
+            jTableMessage.getColumnModel().getColumn(0).setMaxWidth(150);
+            jTableMessage.getColumnModel().getColumn(2).setMinWidth(170);
+            jTableMessage.getColumnModel().getColumn(2).setPreferredWidth(170);
+            jTableMessage.getColumnModel().getColumn(2).setMaxWidth(170);
+            jTableMessage.getColumnModel().getColumn(3).setMinWidth(170);
+            jTableMessage.getColumnModel().getColumn(3).setPreferredWidth(170);
+            jTableMessage.getColumnModel().getColumn(3).setMaxWidth(170);
         }
-
-        jTextArea.setEditable(false);
-        jTextArea.setColumns(20);
-        jTextArea.setRows(4);
-        jScrollPane2.setViewportView(jTextArea);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search/Filter messages", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(0, 0, 0)));
 
@@ -149,24 +153,63 @@ public class MainUI extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(datePanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(filterButton)
-                                .addComponent(resetButton))
-                            .addComponent(datePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(datePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(datePanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(filterButton)
+                    .addComponent(resetButton))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        statusLabel.setFont(new java.awt.Font("Source Code Pro", 1, 12)); // NOI18N
-        statusLabel.setForeground(new java.awt.Color(255, 0, 0));
-        statusLabel.setText("STATUS: DISCONNECTED");
+        jTableStatus.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Serial Port", "Status"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTableStatus.setGridColor(new java.awt.Color(161, 197, 161));
+        jTableStatus.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTableStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableStatusMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTableStatus);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        newerButton.setText("<< Newer");
+        newerButton.setEnabled(false);
+
+        jTextArea.setEditable(false);
+        jTextArea.setColumns(20);
+        jTextArea.setRows(4);
+        jScrollPane2.setViewportView(jTextArea);
 
         deleteButton.setText("Delete Messages");
         deleteButton.setEnabled(false);
@@ -175,8 +218,33 @@ public class MainUI extends javax.swing.JFrame {
         olderButton.setToolTipText("");
         olderButton.setEnabled(false);
 
-        newerButton.setText("<< Newer");
-        newerButton.setEnabled(false);
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(newerButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(olderButton)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(olderButton)
+                    .addComponent(newerButton))
+                .addGap(18, 18, 18)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -215,46 +283,43 @@ public class MainUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(deleteButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(newerButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(olderButton))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 139, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(statusLabel, javax.swing.GroupLayout.Alignment.TRAILING))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(91, 91, 91)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(statusLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(olderButton)
-                            .addComponent(newerButton))
-                        .addGap(18, 18, 18)
-                        .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTableMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMessageMouseClicked
+        int selectedRow = jTableMessage.getSelectedRow();
+        jTextArea.setText(messageTableModel.getValueAt(selectedRow, 1));
+    }//GEN-LAST:event_jTableMessageMouseClicked
+
+    private void jTableStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableStatusMouseClicked
+        int selectedRow = jTableStatus.getSelectedRow();
+        String portName = statusTableModel.getValueAt(selectedRow, 0);
+    }//GEN-LAST:event_jTableStatusMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -271,20 +336,54 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTableMessage;
+    private javax.swing.JTable jTableStatus;
     private javax.swing.JTextArea jTextArea;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JButton newerButton;
     private javax.swing.JButton olderButton;
     private javax.swing.JButton resetButton;
-    private javax.swing.JLabel statusLabel;
     // End of variables declaration//GEN-END:variables
 
-    private TableModel tableModel = new TableModel();
+    private MessageTableModel messageTableModel = new MessageTableModel();
+    private StatusTableModel statusTableModel = new StatusTableModel();
+    private Controller controller;
+    private MessageDialogBox messageDialogBox = new MessageDialogBox(MainUI.this);
 
     private void localInit() {
-        jTable.setModel(tableModel);
+        jTableMessage.setModel(messageTableModel);
+        int width = jTableMessage.getWidth();
+        TableColumn column1 = jTableMessage.getColumnModel().getColumn(0);       
+        TableColumn column2 = jTableMessage.getColumnModel().getColumn(1);
+        TableColumn column3 = jTableMessage.getColumnModel().getColumn(2);
+        TableColumn column4 = jTableMessage.getColumnModel().getColumn(3);
+        
+        column1.setMaxWidth((int)(width*(0.20)));
+        column2.setMaxWidth((int)(width*(0.46)));
+        column3.setMaxWidth((int)(width*(0.18)));
+        column4.setMaxWidth((int)(width*(0.18)));
+        
+        jTableStatus.setModel(statusTableModel);
+        width = jTableStatus.getWidth();
+        column1 = jTableStatus.getColumnModel().getColumn(0);       
+        column2 = jTableStatus.getColumnModel().getColumn(1);        
+        
+        column1.setMaxWidth((int)(width*(0.30)));
+        column2.setMaxWidth((int)(width*(0.70)));       
+        
+        
     }
+
+    public void test() {
+        if (controller != null) {
+            boolean success = controller.connectTo("COM4");
+            controller.updateStatus();
+        }
+    }
+
 }
