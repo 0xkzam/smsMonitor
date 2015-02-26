@@ -1,7 +1,6 @@
 package com.kuz.tmp.control;
 
 import com.kuz.tmp.model.bean.Message;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -14,7 +13,7 @@ import java.util.Observable;
 public class MainUIEvent extends Observable {
 
     private List<Message> currentMessages;
-    private List<Timestamp> selected;
+    private List<Date> selected;
     private Date dateFrom;
     private Date dateTo;
     private int startRow;
@@ -88,7 +87,7 @@ public class MainUIEvent extends Observable {
      * @return List of Timestamps which corresponds to selected Messages in the
      * Table
      */
-    public List<Timestamp> getSelected() {
+    public List<Date> getSelected() {
         return selected;
     }
 
@@ -97,7 +96,7 @@ public class MainUIEvent extends Observable {
      *
      * @param selected
      */
-    public void setSelected(List<Timestamp> selected) {
+    public void setSelected(List<Date> selected) {
         this.selected = selected;
     }
 
