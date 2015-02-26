@@ -4,7 +4,7 @@ package com.kuz.tmp.control.com_interface;
  *
  * @author Kasun Amarasena
  */
-public class ComPortStatus {
+public class ComPortStatus implements Comparable<ComPortStatus> {
 
     private String portName;
     private String Status;
@@ -31,6 +31,11 @@ public class ComPortStatus {
 
     public void setStatus(String Status) {
         this.Status = Status;
+    }
+
+    @Override
+    public int compareTo(ComPortStatus o) {
+        return this.getPortName().compareTo(o.getPortName());
     }
 
 }
