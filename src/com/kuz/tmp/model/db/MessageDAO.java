@@ -11,6 +11,15 @@ import java.util.List;
  */
 public interface MessageDAO {
 
+    //PHONENO VARCHAR(12),CONTENTS VARCHR(220), SENT_TIMESTAMP TIMESTAMP, RECEIVED_TIMESTAMP TIMESTAMP
+    String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?)";
+    String GET_MESSAGES = "select * from MESSAGE order by SENT_TIMESTAMP desc";
+    String GET_MIN_DATE = "select min(SENT_TIMESTAMP) from MESSAGE";
+    String GET_MAX_DATE = "select max(SENT_TIMESTAMP) from MESSAGE";
+    String GET_ROW_COUNT = "select count(PHONENO) from MESSAGE";
+    String GET_MESSAGES_BY_DATE_RANGE = "select * from MESSAGES where SENT_TIMESTAMP >= ? and SENT_TIMESTAMP <= ? order by SENT_TIMESTAMP desc";
+    String DELETE_MESSAGE = "delete from MESSAGE where RECEIVED_TIMESTAMP = ?";
+
     /**
      * Insert Message object
      *

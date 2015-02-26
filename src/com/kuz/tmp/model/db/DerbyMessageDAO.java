@@ -21,14 +21,6 @@ public final class DerbyMessageDAO implements MessageDAO {
     private final Connection connection = new DerbyDBConnection().getConnection();
     private final Logger logger = Logger.getLogger(DerbyMessageDAO.class);
 
-    //PHONENO VARCHAR(12),CONTENTS VARCHR(220), SENT_TIMESTAMP TIMESTAMP, RECEIVED_TIMESTAMP TIMESTAMP
-    private final static String INSERT_MESSAGE = "insert into MESSAGE values (?, ?, ?, ?)";
-    private final static String GET_MESSAGES = "select * from MESSAGE order by SENT_TIMESTAMP desc";
-    private final static String GET_MIN_DATE = "select min(SENT_TIMESTAMP) from MESSAGE";
-    private final static String GET_MAX_DATE = "select max(SENT_TIMESTAMP) from MESSAGE";
-    private final static String GET_ROW_COUNT = "select count(PHONENO) from MESSAGE";
-    private final static String GET_MESSAGES_BY_DATE_RANGE = "select * from MESSAGES where SENT_TIMESTAMP >= ? and SENT_TIMESTAMP <= ? order by SENT_TIMESTAMP desc";
-    private final static String DELETE_MESSAGE = "delete from MESSAGE where RECEIVED_TIMESTAMP = ?";
 
     @Override
     public boolean insert(Message message) {
