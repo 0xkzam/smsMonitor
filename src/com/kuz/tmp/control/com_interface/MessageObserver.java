@@ -13,9 +13,10 @@ import org.apache.log4j.Logger;
  *
  * @author Kasun Amarasena
  */
-public abstract class MessageObserver extends ComPortObserver{
+public abstract class MessageObserver extends ComPortObserver {
 
-    private Logger logger = Logger.getLogger(MessageObserver.class);
+    private Logger logger = Logger.getLogger(MessageObserver.class);  
+    private final DateFormat format = new SimpleDateFormat("yy/MM/ddHH:mm:ss");
 
     @Override
     public void update(ComPort port, byte[] inputBuffer) {
@@ -69,16 +70,15 @@ public abstract class MessageObserver extends ComPortObserver{
                 //setting number
                 msg.setNumber(info[2]);
 
-                //setting received date
+                //setting received date               
                 msg.setReceivedDate(new Date());
 
-                //setting sent date
-                DateFormat format = new SimpleDateFormat("yy/MM/ddHH:mm:ss+SS");
+                //setting sent date               
                 try {
                     Date receivedDate = format.parse(info[4] + info[5]);
                     msg.setSentDate(receivedDate);
                 } catch (ParseException ex) {
-                    logger.error("Error setting received date", ex);
+                    logger.error("Error setting sent date", ex);
                 }
 
                 //setting message contents
