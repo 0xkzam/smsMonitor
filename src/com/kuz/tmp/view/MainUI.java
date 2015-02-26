@@ -1,10 +1,9 @@
 package com.kuz.tmp.view;
 
-import com.kuz.tmp.control.MainUIEvent;
-import com.kuz.tmp.control.MainUIListener;
 import com.kuz.tmp.control.com_interface.MessageObserver;
 import com.kuz.tmp.model.bean.Message;
 import com.kuz.tmp.model.ui.TableModel;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,9 +11,6 @@ import java.util.List;
  * @author Kasun Amarasena
  */
 public class MainUI extends javax.swing.JFrame {
-
-    private MainUIListener mainListener;
-    private MainUIEvent mainEvent;
 
     /**
      * Creates Main UI of the SMS monitor application
@@ -30,23 +26,16 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     /**
-     * Implementing the MessageObserver for this UI class. The incoming Messages
-     * are added to the table model
+     * Implementing the MessageObserver for this UI class. The incoming
+     * Messages, sorted by sent date are added to the table model
      */
     public class MyMessageObserver extends MessageObserver {
 
         @Override
         public void update(List<Message> listOfMessages) {
+            Collections.sort(listOfMessages);
             tableModel.addAll(listOfMessages);
         }
-    }
-
-    /**
-     *
-     * @param listener MainUIListener
-     */
-    public void setListener(MainUIListener listener) {
-        this.mainListener = listener;
     }
 
     /**
