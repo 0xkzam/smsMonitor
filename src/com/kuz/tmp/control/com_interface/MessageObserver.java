@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  *
  * @author Kasun Amarasena
  */
-public abstract class MessageObserver extends ComPortObserver implements MessageObservable {
+public abstract class MessageObserver extends ComPortObserver{
 
     private Logger logger = Logger.getLogger(MessageObserver.class);
 
@@ -22,25 +22,31 @@ public abstract class MessageObserver extends ComPortObserver implements Message
         String simData = new String(inputBuffer);
 
         if (simData.indexOf("OK") != -1) {
-            update(process(simData));
+            List<Message> list = process(simData);
+            if (list != null) {
+                update(list);
+            }
+            //Throws null pointer - reason ????????
+//            if (!list.isEmpty()) {
+//                System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+//            }
         } else if (simData.indexOf("ERROR") != -1) {
             logger.error("AT ERROR!");
         }
     }
 
     /**
-     * New SIM Data(processed) is passed to this method as a List of Message
+     * New SIM Data(listed) is passed to this method as a List of Message
      * objects when data is available.
      *
      * @param listOfMessages List<Message>
      */
-    @Override
     public abstract void update(List<Message> listOfMessages);
 
     /**
      * Process the SIM data and constructs the Message objects
      *
-     * @param simData
+     * @param simData String of data received from the SIM
      * @return List of Messages
      */
     private List<Message> process(String simData) {
@@ -90,10 +96,10 @@ public abstract class MessageObserver extends ComPortObserver implements Message
                 i = temp - 1;
             }
             if (msg != null) {
+                msg.setContents(msg.getContents().trim());
                 list.add(msg);
             }
         }
         return list;
     }
-
 }
