@@ -8,12 +8,12 @@ import java.util.Objects;
  *
  * @author Kasun Amarasena
  */
-public class Message {
+public class Message implements Comparable<Message> {
 
     private String number;
     private String contents;
     private Date sentDate; //Data included in the message details(in sim data)
-    private Date receivedDate; 
+    private Date receivedDate;
 
     public Message() {
     }
@@ -86,16 +86,23 @@ public class Message {
         if (!Objects.equals(this.sentDate, other.sentDate)) {
             return false;
         }
-        if (!Objects.equals(this.receivedDate, other.receivedDate)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.receivedDate, other.receivedDate);
     }
-    
 
     @Override
     public String toString() {
         return "Message{" + "number=" + number + ", sentDate=" + sentDate + ", receivedDate=" + receivedDate + ", contents=\n" + contents + '}';
+    }
+
+    /**
+     * Sort in descending order using sent date
+     *
+     * @param msg
+     */
+    @Override
+    public int compareTo(Message msg) {
+        return (int) (msg.getSentDate().getTime() - this.getSentDate().getTime());
+
     }
 
 }
