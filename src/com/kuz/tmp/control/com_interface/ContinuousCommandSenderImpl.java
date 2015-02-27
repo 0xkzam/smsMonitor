@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
 
-    
-
     public ContinuousCommandSenderImpl() {
     }
 
@@ -29,6 +27,16 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
     /**
      *
      * @param port ComPort
+     * @param continuousCommand At - This is executed continuously after each
+     * time interval
+     */
+    public ContinuousCommandSenderImpl(ComPort port, At continuousCommand) {
+        super(port, continuousCommand.toString());
+    }
+
+    /**
+     *
+     * @param port ComPort
      * @param continuousCommand This is executed continuously after each time
      * interval
      * @param preCommands List of commands, executed prior to the continuous
@@ -38,12 +46,25 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
         super(port, continuousCommand);
         this.setPreCommands(preCommands);
     }
+    
+        /**
+     *
+     * @param port ComPort
+     * @param continuousCommand This is executed continuously after each time
+     * interval
+     * @param preCommands List of commands, executed prior to the continuous
+     * command
+     */
+    public ContinuousCommandSenderImpl(ComPort port, At continuousCommand, List<String> preCommands) {
+        super(port, continuousCommand.toString());
+        this.setPreCommands(preCommands);
+    }
 
     @Override
     public void run() {
         ComPort port = this.getPort();
         if (port != null) {
-            
+
             List<String> preCommands = getPreCommands();
             if (preCommands != null || !preCommands.isEmpty()) {
                 for (String preCommand : preCommands) {
@@ -70,5 +91,5 @@ public class ContinuousCommandSenderImpl extends ContinuousCommandSender {
                 }
             }
         }
-    }    
+    }
 }
