@@ -19,7 +19,7 @@ public abstract class ContinuousCommandSender extends Thread {
     private byte[] commandByte;
     private int commandInt;
     private long interval = DEFAULT_INTERVAL;
-    private List<String> preCommands;
+    private List<String> preCommands;    
     private volatile boolean continueOn = true;
 
     public ContinuousCommandSender() {
@@ -104,6 +104,6 @@ public abstract class ContinuousCommandSender extends Thread {
 
     public void setPreCommands(List<String> preCommands) {
         this.preCommands = preCommands;
-    }
+    }   
 
 }
