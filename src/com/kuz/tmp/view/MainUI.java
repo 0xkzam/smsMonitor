@@ -1,15 +1,11 @@
 package com.kuz.tmp.view;
 
 import com.kuz.tmp.control.Controller;
-import com.kuz.tmp.control.com_interface.ComPortStatus;
-import com.kuz.tmp.model.bean.Message;
-import com.kuz.tmp.model.ui.MessageTableModel;
-import com.kuz.tmp.model.ui.StatusTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 /**
@@ -20,25 +16,23 @@ import javax.swing.table.TableColumn;
  */
 public class MainUI extends javax.swing.JFrame {
 
-    public MainUI() {
+    public MainUI(AbstractTableModel messageTableModel, AbstractTableModel statusTableModel) {
         initComponents();
-        localInit();
         this.setLocationRelativeTo(null);
 
-        //datePanel1.setMinDate();
-        // datePanel2.setCurrentDate();
+        this.messageTableModel = messageTableModel;
+        this.statusTableModel = statusTableModel;
+        jTableMessage.setModel(messageTableModel);
+        jTableStatus.setModel(statusTableModel);
+
+        localInit();
+
+        datePanel1.setMinDate();
+        datePanel2.setCurrentDate();
     }
 
     public void setController(Controller controller) {
         this.controller = controller;
-    }
-
-    public void addMessages(List<Message> listOfMessages) {
-        messageTableModel.addAll(listOfMessages);
-    }
-
-    public void updateStatus(List<ComPortStatus> statusList) {
-        statusTableModel.addAll(statusList);
     }
 
     /**
@@ -332,17 +326,17 @@ public class MainUI extends javax.swing.JFrame {
 
     private void jTableMessageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMessageMouseClicked
         int selectedRow = jTableMessage.getSelectedRow();
-        jTextArea.setText(messageTableModel.getValueAt(selectedRow, 1));
+        jTextArea.setText((String) messageTableModel.getValueAt(selectedRow, 1));
     }//GEN-LAST:event_jTableMessageMouseClicked
 
     private void jTableStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableStatusMouseClicked
         int selectedRow = jTableStatus.getSelectedRow();
-        String portName = statusTableModel.getValueAt(selectedRow, 0);
+        String portName = (String) statusTableModel.getValueAt(selectedRow, 0);
     }//GEN-LAST:event_jTableStatusMouseClicked
 
     private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
         if (controller != null) {
-            controller.updateStatus();
+            controller.updatePortStatus();
         }
     }//GEN-LAST:event_jButtonRefreshActionPerformed
 
@@ -380,13 +374,16 @@ public class MainUI extends javax.swing.JFrame {
     private JMenuItem connectStatusMenuItem;
     private JMenuItem disconnectStatusMenuItem;
 
-    private MessageTableModel messageTableModel = new MessageTableModel();
-    private StatusTableModel statusTableModel = new StatusTableModel();
+    private AbstractTableModel messageTableModel;
+    private AbstractTableModel statusTableModel;
+    //private AbstractTableModel messageTableModel = new MessageTableModel();
+    //private AbstractTableModel statusTableModel = new StatusTableModel();
+
     private Controller controller;
     private MessageDialogBox messageDialogBox = new MessageDialogBox(MainUI.this);
 
     private void localInit() {
-        jTableMessage.setModel(messageTableModel);
+
         int width = jTableMessage.getWidth();
         TableColumn column1 = jTableMessage.getColumnModel().getColumn(0);
         TableColumn column2 = jTableMessage.getColumnModel().getColumn(1);
@@ -398,7 +395,6 @@ public class MainUI extends javax.swing.JFrame {
         column3.setMaxWidth((int) (width * (0.18)));
         column4.setMaxWidth((int) (width * (0.18)));
 
-        jTableStatus.setModel(statusTableModel);
         width = jTableStatus.getWidth();
         column1 = jTableStatus.getColumnModel().getColumn(0);
         column2 = jTableStatus.getColumnModel().getColumn(1);
@@ -414,11 +410,11 @@ public class MainUI extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = jTableStatus.getSelectedRow();
-                String portName = statusTableModel.getValueAt(selectedRow, 0);
+                String portName = (String) statusTableModel.getValueAt(selectedRow, 0);
                 if (controller != null) {
                     boolean success = controller.connectTo(portName);
                     if (success) {
-                        controller.updateStatus();
+                        controller.updatePortStatus();
                     }
                 }
 
@@ -429,10 +425,10 @@ public class MainUI extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = jTableStatus.getSelectedRow();
-                String portName = statusTableModel.getValueAt(selectedRow, 0);
+                String portName = (String) statusTableModel.getValueAt(selectedRow, 0);
                 if (controller != null) {
                     controller.disconnect(portName);
-                    controller.updateStatus();
+                    controller.updatePortStatus();
                 }
             }
         });
@@ -441,14 +437,4 @@ public class MainUI extends javax.swing.JFrame {
         popupMenu.add(disconnectStatusMenuItem);
         jTableStatus.setComponentPopupMenu(popupMenu);
     }
-
-    public void test() {
-        if (controller != null) {
-//            controller.updateStatus();
-            boolean success = controller.connectTo("COM4");
-            controller.updateStatus();
-            
-        }
-    }
-
 }
