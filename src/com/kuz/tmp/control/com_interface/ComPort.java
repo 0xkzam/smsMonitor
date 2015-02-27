@@ -27,7 +27,7 @@ public class ComPort extends Observable implements SerialPortEventListener {
     private InputStream inputStream;
     private OutputStream outputStream;
     private byte[] readBuffer; // Input Stream Buffer    
-    public static final int DEFAULT_BUFFER_SIZE = 1024;
+    public static final int DEFAULT_BUFFER_SIZE = 1024*2;
     private int bufferSize;
 
     public ComPort(CommPortIdentifier portID) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {
@@ -54,6 +54,17 @@ public class ComPort extends Observable implements SerialPortEventListener {
      */
     public synchronized void send(String command) throws IOException {
         outputStream.write(command.getBytes());
+    }
+    
+    /**
+     * Send commands to the COM port as Strings <br/>
+     * ex: AT commands
+     *
+     * @param command At
+     * @throws java.io.IOException
+     */
+    public synchronized void send(At command) throws IOException {
+        outputStream.write(command.toString().getBytes());
     }
 
     /**
