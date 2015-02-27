@@ -35,6 +35,10 @@ public class ComPort extends Observable implements SerialPortEventListener {
         register();
         bufferSize = DEFAULT_BUFFER_SIZE;
     }
+    
+    public ComPort(String portID) throws NoSuchPortException, PortInUseException, IOException, TooManyListenersException {        
+        this(CommPortIdentifier.getPortIdentifier(portID));
+    }
 
     /**
      * This method is used to read the input byte stream
