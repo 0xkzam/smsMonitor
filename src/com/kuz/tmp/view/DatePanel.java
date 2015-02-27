@@ -1,12 +1,10 @@
 package com.kuz.tmp.view;
 
-import com.kuz.tmp.old.model.Query;
-import java.sql.SQLException;
-
+import java.util.Date;
 import javax.swing.JPanel;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import net.sourceforge.jdatepicker.impl.SqlDateModel;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import org.apache.log4j.Logger;
 
 /**
@@ -17,14 +15,14 @@ import org.apache.log4j.Logger;
  */
 public class DatePanel extends JPanel {
 
-    private SqlDateModel dateModel;
+    private UtilDateModel dateModel;
     private JDatePanelImpl datePanel;
     private JDatePickerImpl datePicker;
     private final Logger logger = Logger.getLogger(DatePanel.class);
 
     public DatePanel() {
 
-        dateModel = new SqlDateModel();
+        dateModel = new UtilDateModel();
 
         datePanel = new JDatePanelImpl(dateModel);
         datePicker = new JDatePickerImpl(datePanel);
@@ -35,8 +33,8 @@ public class DatePanel extends JPanel {
      *
      * @return Selected java.sql.Date
      */
-    public java.sql.Date getDate() {
-        return (java.sql.Date) datePicker.getModel().getValue();
+    public Date getDate() {
+        return (Date) datePicker.getModel().getValue();
     }
 
     /**
@@ -44,23 +42,15 @@ public class DatePanel extends JPanel {
      * received.
      */
     public void setMinDate() {
-        try {
-            dateModel.setValue(Query.getMinDate());
-            dateModel.setSelected(true);
-        } catch (SQLException ex) {
-            logger.error("Error setting MinDate", ex);
-        }
+        //To do
+        dateModel.setSelected(true);
     }
 
     /**
      * Set JDatePanel initial display date to current date.
      */
     public void setCurrentDate() {
-        try {
-            dateModel.setValue(Query.getCurrentDate());
-            dateModel.setSelected(true);
-        } catch (SQLException ex) {
-            logger.error("Error setting Current date", ex);
-        }
+        dateModel.setValue(new Date());
+        dateModel.setSelected(true);
     }
 }
