@@ -1,6 +1,13 @@
 package com.kuz.tmp.control.com_interface;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TooManyListenersException;
+import javax.comm.NoSuchPortException;
+import javax.comm.PortInUseException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 
 /**
@@ -46,32 +53,40 @@ public class ContinuousCommandSenderTest {
 //            ComPort port = connector.connectTo("COM4");
 //            ComPortObserver ob = new ComPortObserverImpl();
 //            port.addObserver(ob);
-//            port.send("AT\r\n");
-//            port.send("AT+CMGF=1\r\n");
-//            port.send("AT+CMGL=\"ALL\"\r\n");
+//            port.send(At.CHECK.toString());
+//            port.send(At.SET_TEXT_MODE.toString());
+//            port.send(At.READ_ALL.toString());
 //            Thread.sleep(2000);
-//            port.send("AT+CMGL=\"ALL\"\r\n");
+//            port.send(At.READ_ALL.toString());
 //
 //        } catch (NoSuchPortException | IOException | PortInUseException | TooManyListenersException ex) {
 //            fail(ex.toString());
 //        }
 //    }
 
-//    @Test
-//    public void test3() throws InterruptedException, NoSuchPortException, IOException, PortInUseException, TooManyListenersException {
-//        
-//            ComPort port = ComPortConnector.getInstance().connectTo("COM4");
-//            ComPortObserver observer = new ComPortObserverImpl();
-//            port.addObserver(observer);
-//
-//            List<String> pre = new ArrayList<>(2);
-//            pre.add("AT\r\n");
-//            pre.add("AT+CMGF=1\r\n");
-//
-//            ContinuousCommandSender sender = new ContinuousCommandSenderImpl(port, "AT+CMGL=\"ALL\"\r\n", pre);
-//            sender.setInterval(2000L);
-//            sender.start(); 
-//        
-//    }
+    
+    public void test3() throws InterruptedException, NoSuchPortException, IOException, PortInUseException, TooManyListenersException {
+        
+            ComPort port = ComPortConnector.getInstance().connectTo("COM4");
+            ComPortObserver observer = new ComPortObserverImpl();
+            port.addObserver(observer);
+
+            List<String> pre = new ArrayList<>(2);
+            //pre.add(At.CHECK.toString());
+           // pre.add(At.SET_TEXT_MODE.toString());
+
+            ContinuousCommandSender sender = new ContinuousCommandSenderImpl(port, At.READ_ALL, pre);
+            sender.setInterval(2000L);
+            sender.start(); 
+                    
+    }
+    
+    public static void main(String[] args) {
+        try {
+            new ContinuousCommandSenderTest().test3();
+        } catch (InterruptedException | NoSuchPortException | IOException | PortInUseException | TooManyListenersException ex) {
+            Assert.fail(ex.toString());
+        }
+    }
 
 }

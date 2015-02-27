@@ -1,9 +1,13 @@
 package com.kuz.tmp.control.com_interface;
 
 import com.kuz.tmp.model.bean.Message;
+import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TooManyListenersException;
+import javax.comm.NoSuchPortException;
+import javax.comm.PortInUseException;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 
@@ -24,22 +28,33 @@ public class Worker extends SwingWorker<Void, Message> implements Observer {
 
     @Override
     @SuppressWarnings("empty-statement")
-    protected Void doInBackground() throws Exception {
-        
-        port = ComPortConnector.getInstance().connectTo(this.portName);
-        port.addObserver(this);
-        port.send(At.CHECK);
-        port.send(At.SET_TEXT_MODE);
-        port.send(At.READ_ALL);
-        while(!finished);
-        
+    protected Void doInBackground() throws InterruptedException {
+        try {
+            System.out.println("Worker started");
+            port = new ComPort(portName);
+            port.addObserver(this);
+            port.send(At.CHECK);
+            port.send(At.SET_TEXT_MODE);
+            int count = 0;
+            while (true) {
+                port.send(At.READ_ALL);
+                while (!finished); 
+                Thread.sleep(3000L);
+                finished = false;
+                System.out.println("phase "+(count++)+" finished");
+            }
+            //return null;
+        } catch (NoSuchPortException | PortInUseException | IOException | TooManyListenersException ex) {
+            logger.error("", ex);
+        }
         return null;
+
     }
 
     @Override
     protected void done() {
-       port.close();
-       port.deleteObserver(this);
+        port.close();
+        port.deleteObserver(this);
     }
 
     @Override
@@ -55,8 +70,7 @@ public class Worker extends SwingWorker<Void, Message> implements Observer {
 
         if (simData.indexOf("OK") != -1) {
             List<Message> list = Util.process(simData);
-            if (list != null) {
-                //update(list);
+            if (list != null) {           
                 for (Message message : list) {
                     publish(message);
                 }

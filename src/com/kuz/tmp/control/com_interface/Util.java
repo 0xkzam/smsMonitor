@@ -1,5 +1,6 @@
 package com.kuz.tmp.control.com_interface;
 
+import com.kuz.tmp.model.bean.ComPortStatus;
 import com.kuz.tmp.model.bean.Message;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,7 +15,7 @@ import org.apache.log4j.Logger;
  * @author Kasun Amarasena
  */
 public class Util {
-    
+
     private static Logger logger = Logger.getLogger(Util.class);
     private final static DateFormat dateFormat = new SimpleDateFormat("yy/MM/ddHH:mm:ss");
 
@@ -76,5 +77,15 @@ public class Util {
             }
         }
         return list;
+    }
+
+    /**
+     * Process modem meta data
+     * @param simData
+     * @return 
+     */
+    public static ComPortStatus processMetaData(String simData) {
+
+        return null;
     }
 }
