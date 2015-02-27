@@ -1,7 +1,7 @@
  
 package com.kuz.tmp.model.ui;
 
-import com.kuz.tmp.control.com_interface.ComPortStatus;
+import com.kuz.tmp.model.bean.ComPortStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +46,9 @@ public class StatusTableModel extends AbstractTableModel {
             case 0:
                 return status.getPortName();
             case 1:
-                return status.getStatus();            
+                return status.getStatus().toString();    
+            case 2:
+                return (status.getDeviceManufacturer()+" "+status.getDeviceModel());
             default:
                 return null;
         }

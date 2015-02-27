@@ -4,6 +4,7 @@ import com.kuz.tmp.model.bean.Message;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -79,7 +80,8 @@ public class MessageTableModel extends AbstractTableModel{
         return columns.get(col);
     }
     
-    public void addAll(List<Message> listOfMessages){        
+    public void addAll(List<Message> listOfMessages){    
+        Collections.sort(listOfMessages);
         messageList.addAll(0,listOfMessages);
         fireTableDataChanged();
     }  
