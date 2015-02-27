@@ -2,23 +2,7 @@ package com.kuz.tmp.control;
 
 import java.util.List;
 
-public interface Controller {
-
-    //AT commands
-    String AT_CHECK = "AT\r\n";
-    String AT_SET_TEXT_MODE = "AT+CMGF=1\r\n";
-    String AT_READ_ALL = "AT+CMGL=\"ALL\"\r\n";
-    String AT_READ_UNREAD = "AT+CMGL=\"REC UNREAD\"\r\n";
-    String AT_AVAILABLE_COMMANDS = "AT+CLAC\r\n";
-    String AT_SERVICE_CENTER = "AT+CSCA?\r\n";
-    String AT_MANUFACTURER = "AT+CGMI\r\n";
-    String AT_DEVICE_MODEL = "AT+CGMM\r\n";
-
-    //Status
-    String IN_USE = "In use";
-    String IN_USE_OTHER = "In use by third party";
-    String NOT_IN_USE = "Not in use";
-    String CONNECTION_ERROR = "Unable to check";
+public interface Controller {      
 
     /**
      * This method is used to connect to a specified ComPort and start
@@ -47,6 +31,6 @@ public interface Controller {
     /**
      * Push status of all com ports to the UI
      */
-    void updateStatus();
+    void updatePortStatus();
 
 }
