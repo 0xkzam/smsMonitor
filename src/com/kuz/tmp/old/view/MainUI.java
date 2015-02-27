@@ -447,8 +447,8 @@ public class MainUI extends javax.swing.JFrame {
 
     private void filterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterButtonActionPerformed
         timeStampList.clear();
-        Date from = datePanel1.getDate();
-        Date to = datePanel2.getDate();
+        Date from = (Date) datePanel1.getDate();
+        Date to = (Date) datePanel2.getDate();
         removeAllRows();
         if (from.after(to)) {
             return;
